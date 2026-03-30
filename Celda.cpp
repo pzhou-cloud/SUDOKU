@@ -1,13 +1,11 @@
-#pragma once
 #include "Celda.h";
-
 void inicializaCelda(tCelda& c) {
 
 	c.estado = VACIA;
 	c.valor = 0;
 
 }
-void inicializaCelda(tCelda& c, int v, tEstado estado) {
+void inicializaCelda(tCelda& c, int& v, tEstado& estado) { // he añadido & al v
 
 	c.estado = estado;
 	c.valor = v;
@@ -49,4 +47,3 @@ void pon_original(tCelda& c) {
 void pon_ocupada(tCelda& c) {
 	c.estado = OCUPADA;
 }
-
