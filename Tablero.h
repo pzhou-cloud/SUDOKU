@@ -1,7 +1,7 @@
 #pragma once
-
-#pragma once
 #include"Celda.h"
+using namespace std;
+
 const int DIM = 9;
 struct tTablero {
 	int dimension;
@@ -15,4 +15,3 @@ int dame_dimension(const tTablero& t);
 tCelda dam_elem(const tTablero& t, int f, int c);
 
 void pon_elemento(tTablero& t, int f, int c, tCelda celda);
-
