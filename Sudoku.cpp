@@ -1,7 +1,6 @@
 #pragma once
 #include "Sudoku.h";
 
-
 void inicializaSudoku(tSudoku& s) {
 	s.cont_numeros = 0;
 	s.celdas_bloqueadas.cont = 0;
@@ -22,9 +21,9 @@ void carga_sudoku(ifstream& archivo, tSudoku& s) {
 			}
 			else {
 				s.tablero.matriz[i][j].estado = ORIGINAL;
-				s.tablero.matriz[i][j].valor = value;
 				s.cont_numeros++;
 			}
+			s.tablero.matriz[i][j].valor = value;
 
 
 
@@ -51,22 +50,22 @@ bool bloqueo(const tSudoku& s) {
 }
 
 int dame_celda_bloqueadas(const tSudoku& s) {
-	return s.celdas_bloqueadas.cont; 
+	return s.celdas_bloqueadas.cont;
 
 }
 bool es_valor_posible(tSudoku& s, int f, int c, int v) {
-	bool ok = false; 
-	if (es_vacia(s.tablero.matriz[f][c]) && v >= 0 && v >= 9) {
-	
+	bool ok = false;
+	if (es_vacia(s.tablero.matriz[f][c]) && v > 0 && v >= 9) { // pq 0 es nada
+
 		ok = true;
 	}
-	return ok; 
+	return ok;
 }
 
 bool pon_valor(tSudoku& s, int f, int c, int v) {
-	
+
 	bool ok = false;
-	
+
 	if (es_valor_posible(s, f, c, v)) {
 
 		s.tablero.matriz[f][c].valor = v;
@@ -87,15 +86,22 @@ bool pon_valor(tSudoku& s, int f, int c, int v) {
 void quita_valor(tSudoku& s, int f, int c) {
 
 	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f >= 0 && f <= 9) {
-		
+
 		tCelda celda = dame_celda(s, f, c);
 		pon_vacia(celda);
 		//problema para el futuro
 	}
 
 }
-void reset(tSudoku& s);
-void autocompleta(tSudoku& s);
+void reset(tSudoku& s) {
 
 
+
+}
+void autocompleta(tSudoku& s) {
+
+
+
+
+}
 
