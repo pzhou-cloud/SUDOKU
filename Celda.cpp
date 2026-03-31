@@ -5,8 +5,7 @@ void inicializaCelda(tCelda& c) {
 	c.valor = 0;
 
 }
-void inicializaCelda(tCelda& c, int& v, tEstado& estado) { // he añadido & al v
-
+void inicializaCelda(tCelda& c, int v, tEstado estado) {
 	c.estado = estado;
 	c.valor = v;
 
