@@ -2,6 +2,7 @@
 #include<fstream>
 #include "inputOutput.h"
 
+
 using namespace std;
 
 int main() {
@@ -23,31 +24,57 @@ int main() {
 		cout << "Elige una opcion: ";
 		cin >> n;
 		if (n >= 1 && n <= 6) {
-			cout << "Fila y columna entre 1...9: ";
-			cin >> f >> c;
-			tCelda celda = dame_celda(s, f, c);
-			cout << "Los valores posibles para la celda son: { " << dame_valor(celda) << " }" << endl; // cambiar el dame_valor
+			switch (n) {
+			case 1:
+				cout << "Fila y columna entre 1...9: ";
+				cin >> f >> c;
+				cout << "Valor: ";
+				cin >> value;
+				tCelda celda = dame_celda(s, f, c);
 
-		}
-		cout << "Valor: ";
-		cin >> value;
+				if (pon_valor(s, f, c, value)) {
+					cout << "correcto" << endl; // hay algo mal en el subprograma
+				}
+				else {
+					cout << "no";
+				}
+				break;
+			case 2:
+				cout << "Fila y columna entre 1...9: ";
+				cin >> f >> c;
+				if (quita_valor(s, f, c)) {
+					cout << "Correcto ";
 
-		switch (n) {
-		case 1:
-			if (pon_valor(s, f, c, value)) {
-				cout << "correcto" << endl;
+				}
+				else
+					cout << "no";
+				break;
+			case 3: 
+				cout << "Fila y columna entre 1...9: ";
+				cin >> f >> c;
+				if (quita_valor(s, f, c)) {
+					cout << "correcto";
+				}
+				else
+					cout << "no"; 
+			case 4: 
+				cout << "Fila y columna entre 1...9: ";
+				cin >> f >> c;
+				cout << "Los valores posibles para la celda son: { "; 
+				int v = 1; 
+				while (v < 9) {
+					if (es_valor_posible(s, f, c, v)) {
+						cout << v << " "; 
+					}
+				}
+				cout << " }"; 
+				
 			}
-			else {
-				cout << "no"; 
-			}
-			break;
-		case 2: break;
-
-
 		}
 	}
 	
 
 	return 0;
 }
+
 
