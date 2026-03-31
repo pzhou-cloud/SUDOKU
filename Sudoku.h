@@ -29,8 +29,7 @@ int dame_celda_bloqueadas(const tSudoku& s);
 bool es_valor_posible(const tSudoku& s, int f, int c, int v);
 
 bool pon_valor(tSudoku& s, int f, int c, int v);
-void quita_valor(tSudoku& s, int f, int c);
+bool quita_valor(tSudoku& s, int f, int c);
 void reset(tSudoku& s);
 void autocompleta(tSudoku& s);
-
-
+int posibles_valores(tSudoku& s, int f, int c, int v); 
