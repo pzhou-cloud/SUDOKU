@@ -8,7 +8,7 @@ struct tCelda {
 using namespace std;
 
 void inicializaCelda(tCelda& c);
-void inicializaCelda(tCelda& c, int& v, tEstado& estado);
+void inicializaCelda(tCelda& c, int v, tEstado estado);
 
 bool es_vacia(const tCelda& c);
 bool es_original(const tCelda& c);
