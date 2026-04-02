@@ -1,6 +1,7 @@
 #include "inputOutput.h"
 #include <iomanip>
 #include<iostream>
+#include <cmath>
 
 const int BARRA_HORIZONTAL = 196;
 const int CRUZ = 197;

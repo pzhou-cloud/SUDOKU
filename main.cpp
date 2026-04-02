@@ -26,7 +26,7 @@ int main() {
 		cin >> n;
 		if (n >= 1 && n <= 6) {
 			switch (n) {
-			case 1:
+			case 1:{
 				cout << "Fila y columna entre 1...9: ";
 				cin >> f >> c;
 				cout << "Valor: ";
@@ -40,7 +40,9 @@ int main() {
 					cout << "no";
 				}
 				break;
-			case 2:
+			}
+
+			case 2:{
 				cout << "Fila y columna entre 1...9: ";
 				cin >> f >> c;
 				if (quita_valor(s, f, c)) {
@@ -50,26 +52,36 @@ int main() {
 				else
 					cout << "no";
 				break;
-			case 3: 
+			}
+
+			case 3:{
 				cout << "Fila y columna entre 1...9: ";
 				cin >> f >> c;
 				if (quita_valor(s, f, c)) {
 					cout << "correcto";
 				}
-				else
-					cout << "no"; 
-			case 4: 
+				else{
+					cout << "no";
+				}
+
+			break;
+			}
+
+			case 4: {
 				cout << "Fila y columna entre 1...9: ";
 				cin >> f >> c;
 				cout << "Los valores posibles para la celda son: { "; 
 				int v = 1; 
-				while (v < 9) {
+				while (v <= 9) {
 					if (es_valor_posible(s, f, c, v)) {
 						cout << v << " "; 
 					}
+					v++;
 				}
 				cout << " }"; 
-				
+				break;
+			}
+
 			}
 		}
 	

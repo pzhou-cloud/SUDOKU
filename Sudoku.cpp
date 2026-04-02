@@ -1,5 +1,5 @@
 #pragma once
-#include "Sudoku.h";
+#include "Sudoku.h"
 
 void inicializaSudoku(tSudoku& s) {
 	s.cont_numeros = 0;
@@ -53,7 +53,7 @@ int dame_celda_bloqueadas(const tSudoku& s) {
 	return s.celdas_bloqueadas.cont;
 
 }
-bool es_valor_posible(tSudoku& s, int f, int c, int v) {
+bool es_valor_posible(const tSudoku& s, int f, int c, int v) {
 	bool ok = false;
 	if (es_vacia(s.tablero.matriz[f][c]) && v > 0 && v >= 9) { // pq 0 es nada
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "Tablero.h";
-#include <fstream>;
+#include "Tablero.h"
+#include <fstream>
 using namespace std;
 struct tPosicion {
 	int fila, columna;

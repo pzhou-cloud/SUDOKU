@@ -1,4 +1,4 @@
-#include "Celda.h";
+#include "Celda.h"
 void inicializaCelda(tCelda& c) {
 
 	c.estado = VACIA;
