@@ -1,4 +1,3 @@
-#pragma once
 #include "Sudoku.h"
 
 void inicializaSudoku(tSudoku& s) {
@@ -52,13 +51,6 @@ bool bloqueo(const tSudoku& s) {
 int dame_celda_bloqueadas(const tSudoku& s) {
 	return s.celdas_bloqueadas.cont;
 
-}
-
-bool es_valor_posible(const tSudoku& s, int f, int c, int v) {
-	
-	return (nombre_temporal(s, f, c, v) && !esta_valor_en_fila(s, f, v) &&
-	!esta_valor_en_columna(s, c, v) && !esta_valor_en_bloque(s, f, c, v));
-	
 }
 
 bool nombre_temporal(const tSudoku& s, int f, int c, int v){
@@ -118,6 +110,14 @@ bool esta_valor_en_bloque(const tSudoku& s, int f, int c, int v){
 
 	return ok;
 }
+
+bool es_valor_posible(const tSudoku& s, int f, int c, int v) {
+	
+	return (nombre_temporal(s, f, c, v) && !esta_valor_en_fila(s, f, v) &&
+	!esta_valor_en_columna(s, c, v) && !esta_valor_en_bloque(s, f, c, v));
+	
+}
+
 
 void busca_celdas_bloqueadas(tSudoku& s){
 
@@ -187,7 +187,7 @@ void autocompleta(tSudoku& s) {
 	while (v < 9) {
 		for (int i = 1; i < DIM; i++) {
 			for (int j = 1; j < DIM; j++) {
-				if (posibles_valores(s, i, j, v) == 1) {
+				if (posibles_valores(s, i, j) == 1) {
 					pon_valor(s.tablero.matriz[i][j], v); 
 				}
 

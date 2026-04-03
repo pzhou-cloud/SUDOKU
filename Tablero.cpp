@@ -1,5 +1,3 @@
-
-#pragma once
 #include "Tablero.h"
 
 void inicializaTablero(tTablero& t) {
