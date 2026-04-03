@@ -125,7 +125,7 @@ void busca_celdas_bloqueadas(tSudoku& s){
 
 	for(int f = 0; f < DIM; f++){
 		for(int c = 0; c < DIM; c++){
-			if(posibles_valores(s, f, c, v) == 0){
+			if(posibles_valores(s, f, c) == 0){
 				s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont].fila = f;
 				s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont].columna = c;
 				s.celdas_bloqueadas.cont++;
@@ -143,17 +143,11 @@ bool pon_valor(tSudoku& s, int f, int c, int v) {
 	if (es_valor_posible(s, f, c, v)) {
 
 		pon_valor(s.tablero.matriz[f][c], v); 
-		pon_ocupada(s.tablero.matriz[f][c]); 
-		//Actualizar celdas bloqueadas
+		pon_ocupada(s.tablero.matriz[f][c]);
+		s.cont_numeros++;
 		
-		tPosicion posicion;
-		posicion.fila = f;
-		posicion.columna = c;
-		s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont] = posicion;
-		s.celdas_bloqueadas.cont++;
+		busca_celdas_bloqueadas(s);
 	
-		
-		//Aumentar valor celdas no vacías
 		ok = true;
 	}
 
@@ -161,13 +155,14 @@ bool pon_valor(tSudoku& s, int f, int c, int v) {
 }
 bool quita_valor(tSudoku& s, int f, int c) {
 	bool ok = false; 
-	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f > 0 && f <= 9) {
+	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f > 0 && f < 9) {
 
 		tCelda celda = dame_celda(s, f, c);
 		pon_vacia(celda);
-		s.celdas_bloqueadas.cont--; 
-		ok = true; 
-		//problema para el futuro
+		s.cont_numeros--;
+		
+		busca_celdas_bloqueadas(s);
+		ok = true;
 	}
 	return ok; 
 
