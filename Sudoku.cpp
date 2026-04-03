@@ -99,11 +99,17 @@ bool quita_valor(tSudoku& s, int f, int c) {
 
 }
 void reset(tSudoku& s) {
-	for (int i = 1; i <= s.celdas_bloqueadas.cont; i++) {
-		for (int j = 1; j <= s.celdas_bloqueadas.cont; j++) {
-			quita_valor(s, i, j); 
+	
+	for(int i = 0; i < DIM; i++){
+		for(int j= 0; j < DIM; j++){
+
+			quita_valor(s, i, j);
 		}
 	}
+
+	//TODO: Mirar donde guardamos el número original de celdas ocupadas
+	s.cont_numeros = 999;
+	s.celdas_bloqueadas.cont = 0;
 
 
 }
