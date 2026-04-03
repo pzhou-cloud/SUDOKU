@@ -24,9 +24,11 @@ int main() {
 		cout << "6.- salir" << endl;
 		cout << "Elige una opcion: ";
 		cin >> n;
+		inicializaSudoku(s);
 		if (n >= 1 && n <= 6) {
 			switch (n) {
 			case 1: {
+				
 				cout << "Fila y columna entre 1...9: ";
 				cin >> f >> c;
 				cout << "Valor: ";
@@ -87,6 +89,8 @@ int main() {
 
 	return 0;
 }
+
+
 	
 
 	return 0;
