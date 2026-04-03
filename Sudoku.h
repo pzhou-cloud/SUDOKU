@@ -22,7 +22,7 @@ struct tSudoku {
 void inicializaSudoku(tSudoku& s);
 void carga_sudoku(ifstream& archivo, tSudoku& s);
 int dame_dimension(const tSudoku& s);
-tCelda dame_celda(const tSudoku s, int f, int c);
+tCelda dame_celda(const tSudoku& s, int f, int c);
 
 bool terminado(const tSudoku& s);
 bool bloqueo(const tSudoku& s);
