@@ -3,6 +3,7 @@
 using namespace std;
 
 const int DIM = 9;
+const int MAX_VALORES = 9;
 struct tTablero {
 	int dimension;
 	tCelda matriz[DIM][DIM];

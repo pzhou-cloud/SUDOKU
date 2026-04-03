@@ -18,6 +18,7 @@ struct tSudoku {
 
 };
 
+
 void inicializaSudoku(tSudoku& s);
 void carga_sudoku(ifstream& archivo, tSudoku& s);
 int dame_dimension(const tSudoku& s);

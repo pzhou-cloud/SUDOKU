@@ -35,9 +35,9 @@ void carga_sudoku(ifstream& archivo, tSudoku& s) {
 
 int dame_dimension(const tSudoku& s) {
 	return s.tablero.dimension;
+	tCelda dame_celda(const tSudoku s, int f, int c) {
 }
 
-tCelda dame_celda(const tSudoku s, int f, int c) {
 	return s.tablero.matriz[f][c];
 }
 
@@ -54,13 +54,67 @@ int dame_celda_bloqueadas(const tSudoku& s) {
 
 }
 bool es_valor_posible(const tSudoku& s, int f, int c, int v) {
-	bool ok = false;
-	if (es_vacia(s.tablero.matriz[f][c]) && v > 0 && v <= 9) { 
+	
+	return nombre_temporal(s, f, c, v) && !esta_valor_en_fila(s, f, v) &&
+	!esta_valor_en_columna(s, c, v) && !esta_valor_en_bloque(s, f, c, v);
+}
 
-		ok = true;
+bool nombre_temporal(const tSudoku& s, int f, int c, int v){
+	return  es_vacia(s.tablero.matriz[f][c]) && (v > 0 && v <= 9);
+}
+
+bool esta_valor_en_fila(const tSudoku& s, int f, int v){
+
+	bool ok = false;
+	int c = 0;
+
+	while(ok == false && c < DIM){
+		if(s.tablero.matriz[f][c].valor == v){
+			ok = true;
+		}
+		c++;
 	}
+
 	return ok;
 }
+
+bool esta_valor_en_columna(const tSudoku& s, int c, int v){
+
+	bool ok = false;
+	int f = 0;
+
+	while(ok == false && f < DIM){
+		if(s.tablero.matriz[f][c].valor == v){
+			ok = true;
+		}
+		f++;
+	}
+
+	return ok;
+}
+
+bool esta_valor_en_bloque(const tSudoku& s, int f, int c, int v){
+
+	bool ok = false;
+	int f_esquina_bloque = f / 3 * 3;
+	int c_esquina_bloque = c / 3 * 3;
+
+	while(!ok && f_esquina_bloque < f_esquina_bloque + 3){
+
+		while(!ok && c_esquina_bloque < c_esquina_bloque + 3){
+			if(s.tablero.matriz[f][c].valor == v){
+				ok = true;
+			}
+			c_esquina_bloque++;
+		}
+		f_esquina_bloque++;
+	}
+
+	return ok;
+}
+
+
+
 
 bool pon_valor(tSudoku& s, int f, int c, int v) {
 
