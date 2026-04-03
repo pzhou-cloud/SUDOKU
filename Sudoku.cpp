@@ -55,7 +55,7 @@ int dame_celda_bloqueadas(const tSudoku& s) {
 }
 bool es_valor_posible(const tSudoku& s, int f, int c, int v) {
 	bool ok = false;
-	if (es_vacia(s.tablero.matriz[f][c]) && v > 0 && v >= 9) { // pq 0 es nada
+	if (es_vacia(s.tablero.matriz[f][c]) && v > 0 && v <= 9) { 
 
 		ok = true;
 	}
@@ -68,8 +68,8 @@ bool pon_valor(tSudoku& s, int f, int c, int v) {
 
 	if (es_valor_posible(s, f, c, v)) {
 
-		s.tablero.matriz[f][c].valor = v;
-
+		pon_valor(s.tablero.matriz[f][c], v); 
+		pon_ocupada(s.tablero.matriz[f][c]); 
 		//Actualizar celdas bloqueadas
 		
 		tPosicion posicion;
@@ -77,7 +77,8 @@ bool pon_valor(tSudoku& s, int f, int c, int v) {
 		posicion.columna = c;
 		s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont] = posicion;
 		s.celdas_bloqueadas.cont++;
-
+	
+		
 		//Aumentar valor celdas no vacías
 		ok = true;
 	}
@@ -133,4 +134,3 @@ int posibles_valores(tSudoku& s, int f, int c, int v) {
 
 	return num; 
 }
-
