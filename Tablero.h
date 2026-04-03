@@ -12,6 +12,6 @@ void inicializaTablero(tTablero& t);
 void inicializaTablero(tTablero& t, int d);
 
 int dame_dimension(const tTablero& t);
-tCelda dam_elem(const tTablero& t, int f, int c);
+tCelda dame_elem(const tTablero& t, int f, int c);
 
 void pon_elemento(tTablero& t, int f, int c, tCelda celda);

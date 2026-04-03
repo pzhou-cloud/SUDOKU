@@ -11,7 +11,7 @@ void inicializaTablero(tTablero& t, int d) {
 int dame_dimension(const tTablero& t) {
 	return t.dimension;
 }
-tCelda dam_elem(const tTablero& t, int f, int c) {
+tCelda dame_elem(const tTablero& t, int f, int c) {
 	return t.matriz[f][c];
 
 }
