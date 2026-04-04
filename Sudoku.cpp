@@ -1,75 +1,74 @@
 #include "Sudoku.h"
 
-void inicializaSudoku(tSudoku &s)
+void inicializaSudoku(tSudoku& s)
 {
 	s.cont_numeros = 0;
 	s.celdas_bloqueadas.cont = 0;
 }
 
-void carga_sudoku(ifstream &archivo, tSudoku &s)
+void carga_sudoku(ifstream& archivo, tSudoku& s)
 {
 
 	int value;
 	archivo >> s.tablero.dimension;
 
-	for (int i = 0; i < s.tablero.dimension; i++)
+	for (int i = 0; i < dame_dimension(s); i++)
 	{
-		for (int j = 0; j < s.tablero.dimension; j++)
+		for (int j = 0; j < dame_dimension(s); j++)
 		{
 
 			archivo >> value;
 
 			if (value == 0)
 			{
-				s.tablero.matriz[i][j].estado = VACIA;
+				inicializaCelda(s.tablero.matriz[i][j]);
 			}
 			else
 			{
-				s.tablero.matriz[i][j].estado = ORIGINAL;
+				inicializaCelda(s.tablero.matriz[i][j], value, ORIGINAL);
 				s.cont_numeros++;
 			}
-			s.tablero.matriz[i][j].valor = value;
 		}
 	}
 }
 
-int dame_dimension(const tSudoku &s)
+int dame_dimension(const tSudoku& s)
 {
-	return s.tablero.dimension;
+	return dame_dimension(s.tablero);
 }
 
-tCelda dame_celda(const tSudoku &s, int f, int c)
+tCelda dame_celda(const tSudoku& s, int f, int c)
 {
-	return s.tablero.matriz[f][c];
+	return dame_elem(s.tablero, f,c) ;
 }
 
-bool terminado(const tSudoku &s)
+bool terminado(const tSudoku& s)
 {
-	return s.cont_numeros == s.tablero.dimension * s.tablero.dimension;
+	return s.cont_numeros == dame_dimension(s) * dame_dimension(s);
 }
 
-bool bloqueo(const tSudoku &s)
+bool bloqueo(const tSudoku& s)
 {
 	return s.celdas_bloqueadas.cont != 0;
 }
 
-int dame_num_celda_bloqueadas(const tSudoku &s)
+int dame_num_celda_bloqueadas(const tSudoku& s)
 {
 	return s.celdas_bloqueadas.cont;
 }
 
-void dame_celda_bloqueada(const tSudoku &s, int p, int &f, int &c)
+void dame_celda_bloqueada(const tSudoku& s, int p, int& f, int& c)
 {
 	f = s.celdas_bloqueadas.bloqueadas[p].fila;
 	c = s.celdas_bloqueadas.bloqueadas[p].columna;
 }
 
-bool nombre_temporal(const tSudoku &s, int f, int c, int v)
+bool nombre_temporal(const tSudoku& s, int f, int c, int v)
 {
-	return es_vacia(s.tablero.matriz[f][c]) && (v >= 1 && v <= 9);
+	return es_vacia(dame_celda(s,f,c)) && (v >= 1 && v <= 9);
 }
 
-bool esta_valor_en_fila(const tSudoku &s, int f, int v)
+bool esta_valor_en_fila(const tSudoku& s, int f, int v)
 {
 
 	bool ok = false;
@@ -77,7 +76,7 @@ bool esta_valor_en_fila(const tSudoku &s, int f, int v)
 
 	while (ok == false && c < DIM)
 	{
-		if (s.tablero.matriz[f][c].valor == v)
+		if (dame_valor(dame_celda(s, f, c))== v)
 		{
 			ok = true;
 		}
@@ -87,7 +86,7 @@ bool esta_valor_en_fila(const tSudoku &s, int f, int v)
 	return ok;
 }
 
-bool esta_valor_en_columna(const tSudoku &s, int c, int v)
+bool esta_valor_en_columna(const tSudoku& s, int c, int v)
 {
 
 	bool ok = false;
@@ -95,7 +94,8 @@ bool esta_valor_en_columna(const tSudoku &s, int c, int v)
 
 	while (ok == false && f < DIM)
 	{
-		if (s.tablero.matriz[f][c].valor == v)
+		
+		if (dame_valor(dame_celda(s, f, c)) == v)
 		{
 			ok = true;
 		}
@@ -105,7 +105,7 @@ bool esta_valor_en_columna(const tSudoku &s, int c, int v)
 	return ok;
 }
 
-bool esta_valor_en_bloque(const tSudoku &s, int f, int c, int v)
+bool esta_valor_en_bloque(const tSudoku& s, int f, int c, int v)
 {
 
 	bool ok = false;
@@ -121,7 +121,7 @@ bool esta_valor_en_bloque(const tSudoku &s, int f, int c, int v)
 
 		while (!ok && j < c_esquina_bloque + 3)
 		{
-			if (s.tablero.matriz[i][j].valor == v)
+			if (dame_valor(dame_celda(s, f, c)) == v)
 			{
 				ok = true;
 			}
@@ -133,14 +133,14 @@ bool esta_valor_en_bloque(const tSudoku &s, int f, int c, int v)
 	return ok;
 }
 
-bool es_valor_posible(const tSudoku &s, int f, int c, int v)
+bool es_valor_posible(const tSudoku& s, int f, int c, int v)
 {
 
 	return (nombre_temporal(s, f, c, v) && !esta_valor_en_fila(s, f, v) &&
-			!esta_valor_en_columna(s, c, v) && !esta_valor_en_bloque(s, f, c, v));
+		!esta_valor_en_columna(s, c, v) && !esta_valor_en_bloque(s, f, c, v));
 }
 
-void busca_celdas_bloqueadas(tSudoku &s)
+void busca_celdas_bloqueadas(tSudoku& s)
 {
 
 	s.celdas_bloqueadas.cont = 0;
@@ -159,7 +159,7 @@ void busca_celdas_bloqueadas(tSudoku &s)
 	}
 }
 
-bool pon_valor(tSudoku &s, int f, int c, int v)
+bool pon_valor(tSudoku& s, int f, int c, int v)
 {
 
 	bool ok = false;
@@ -178,7 +178,7 @@ bool pon_valor(tSudoku &s, int f, int c, int v)
 
 	return ok;
 }
-bool quita_valor(tSudoku &s, int f, int c)
+bool quita_valor(tSudoku& s, int f, int c)
 {
 	bool ok = false;
 	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f >= 0 && f < 9)
@@ -193,7 +193,7 @@ bool quita_valor(tSudoku &s, int f, int c)
 	}
 	return ok;
 }
-void reset(tSudoku &s)
+void reset(tSudoku& s)
 {
 
 	for (int i = 0; i < DIM; i++)
@@ -201,7 +201,7 @@ void reset(tSudoku &s)
 		for (int j = 0; j < DIM; j++)
 		{
 			quita_valor(s, i, j);
-			if (es_ocupada(s.tablero.matriz[i][j]))
+			if (es_ocupada(dame_celda(s, i, j)))
 				pon_vacia(s.tablero.matriz[i][j]);
 		}
 	}
@@ -210,7 +210,7 @@ void reset(tSudoku &s)
 	s.cont_numeros = 999;
 	s.celdas_bloqueadas.cont = 0;
 }
-void autocompleta(tSudoku &s)
+void autocompleta(tSudoku& s)
 {
 	int v = 1;
 	bool hay_cambios;
@@ -218,9 +218,9 @@ void autocompleta(tSudoku &s)
 	do
 	{
 		hay_cambios = false;
-		for(int f = 0; f < DIM; f++)
+		for (int f = 0; f < DIM; f++)
 		{
-			for(int c = 0; c < DIM; c++)
+			for (int c = 0; c < DIM; c++)
 			{
 				if (es_vacia(dame_celda(s, f, c)) && posibles_valores(s, f, c) == 1)
 				{
@@ -235,16 +235,16 @@ void autocompleta(tSudoku &s)
 
 			}
 		}
-		
+
 	} while (hay_cambios);
 }
 
-int posibles_valores(tSudoku &s, int f, int c)
+int posibles_valores(tSudoku& s, int f, int c)
 {
 	int v = 1;
 	int num = 0;
 
-	if (es_vacia(s.tablero.matriz[f][c]))
+	if (es_vacia(dame_celda(s, f, c)))
 	{
 		while (v <= 9)
 		{
@@ -258,3 +258,4 @@ int posibles_valores(tSudoku &s, int f, int c)
 
 	return num;
 }
+
