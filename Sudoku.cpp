@@ -177,8 +177,9 @@ void reset(tSudoku& s) {
 
 	for (int i = 0; i < DIM; i++) {
 		for (int j = 0; j < DIM; j++) {
-
 			quita_valor(s, i, j);
+			if(es_ocupada(s.tablero.matriz[i][j]))
+				pon_vacia(s.tablero.matriz[i][j]); 
 		}
 	}
 
