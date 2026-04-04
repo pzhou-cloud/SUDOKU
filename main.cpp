@@ -41,15 +41,15 @@ int main()
 
 				if (pon_valor(s, f - 1, c - 1, value))
 				{
-					cout << "correcto" << endl; // hay algo mal en el subprograma
+					cout << "correcto" << endl; 
 				}
 				else
 				{
 					cout << "No puedes poner un " << value << " en (" << f << " , " << c << " )";
 				}
 			}
-				mostrar_juego_consola(s);
-				break;
+			mostrar_juego_consola(s);
+			break;
 			case 2:
 			{
 				cout << "Fila y columna entre 1...9: ";
@@ -59,12 +59,14 @@ int main()
 					cout << "Correcto ";
 				}
 				else
-					cout << "No puedes quitar el valor en (" << f << " , " << c << " )";
+					cout << "No puedes quitar el valor en (" << f << " , " << c << " )" << endl; 
+				mostrar_juego_consola(s);
 			}
 			break;
 			case 3:
 			{
 				reset(s);
+				mostrar_juego_consola(s);
 			}
 			break;
 			case 4:
@@ -82,16 +84,19 @@ int main()
 					v++;
 				}
 				cout << " }";
+				mostrar_juego_consola(s);
 			}
 			break;
 			case 5:
 			{
 				autocompleta(s);
+				mostrar_juego_consola(s);
 			}
 			break;
 
 			case 6:
 				// Nada, se sale del bucle
+				cout << "Juego terminado"; 
 				break;
 			}
 		} while (!terminado(s) && opcion != 6);
@@ -100,7 +105,6 @@ int main()
 	{
 		cout << "Error al abrir " << nombre_fichero;
 	}
-
 	return 0;
 }
 
@@ -123,7 +127,7 @@ int pedir_opcion_valida()
 	{
 		cout << "Elige una opcion: ";
 		cin >> opcion;
-	} while (opcion < 1 && opcion > 6);
+	} while (opcion <= 1 && opcion > 6);
 
 	return opcion;
 }
