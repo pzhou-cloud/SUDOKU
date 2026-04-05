@@ -121,7 +121,7 @@ bool esta_valor_en_bloque(const tSudoku& s, int f, int c, int v)
 
 		while (!ok && j < c_esquina_bloque + 3)
 		{
-			if (dame_valor(dame_celda(s, f, c)) == v)
+			if (dame_valor(dame_celda(s, i, j)) == v)
 			{
 				ok = true;
 			}
@@ -193,6 +193,19 @@ bool quita_valor(tSudoku& s, int f, int c)
 	}
 	return ok;
 }
+
+int num_celdas_originales(const tSudoku& s){
+	int suma = 0;
+	for(int i = 0; i < DIM; i++){
+		for(int j = 0; j < DIM; j++){
+			if(es_original(dame_celda(s, i, j))){
+				suma++;
+			}
+		}
+	}
+
+	return suma;
+}
 void reset(tSudoku& s)
 {
 
@@ -206,10 +219,11 @@ void reset(tSudoku& s)
 		}
 	}
 
-	// TODO: Mirar donde guardamos el número original de celdas ocupadas
-	s.cont_numeros = 999;
+	
+	s.cont_numeros = num_celdas_originales(s);
 	s.celdas_bloqueadas.cont = 0;
 }
+
 void autocompleta(tSudoku& s)
 {
 	int v = 1;
