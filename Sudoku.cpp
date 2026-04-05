@@ -178,21 +178,6 @@ bool pon_valor(tSudoku& s, int f, int c, int v)
 
 	return ok;
 }
-bool quita_valor(tSudoku& s, int f, int c)
-{
-	bool ok = false;
-	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f >= 0 && f < DIM && c >= 0 && c < DIM)
-	{
-
-		pon_vacia(s.tablero.matriz[f][c]);
-		pon_valor(s.tablero.matriz[f][c], 0);
-
-		elimina_celdas_bloqueadas(s);
-		s.cont_numeros--;
-		ok = true;
-	}
-	return ok;
-}
 
 void elimina_celdas_bloqueadas(tSudoku& s){
 	
@@ -217,6 +202,24 @@ void elimina_celdas_bloqueadas(tSudoku& s){
 
 	}
 }
+
+bool quita_valor(tSudoku& s, int f, int c)
+{
+	bool ok = false;
+	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f >= 0 && f < DIM && c >= 0 && c < DIM)
+	{
+
+		pon_vacia(s.tablero.matriz[f][c]);
+		pon_valor(s.tablero.matriz[f][c], 0);
+
+		elimina_celdas_bloqueadas(s);
+		s.cont_numeros--;
+		ok = true;
+	}
+	return ok;
+}
+
+
 
 int num_celdas_originales(const tSudoku& s){
 	int suma = 0;

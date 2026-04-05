@@ -7,6 +7,7 @@ using namespace std;
 
 void mostrar_menu();
 int pedir_opcion_valida();
+void mostrar_casillas_bloqueadas(const tSudoku& s);
 
 int main()
 {
@@ -22,10 +23,11 @@ int main()
 
 		inicializaSudoku(s);
 		carga_sudoku(archivo, s);
-		mostrar_juego_consola(s);
+		
 		int opcion;
 		do
 		{
+			mostrar_juego_consola(s);
 			mostrar_menu();
 			opcion = pedir_opcion_valida();
 
@@ -41,14 +43,20 @@ int main()
 
 				if (pon_valor(s, f - 1, c - 1, value))
 				{
-					cout << "correcto" << endl; 
+					cout << "Añadido correctamente" << endl;
+					if(bloqueo(s)){
+						cout << "Sudoku bloqueado.....";
+						cout << "Las casillas bloqueadas son: ";
+						mostrar_casillas_bloqueadas(s);
+						cout << endl;
+					} 
 				}
 				else
 				{
 					cout << "No puedes poner un " << value << " en (" << f << " , " << c << " )";
 				}
 			}
-			mostrar_juego_consola(s);
+			
 			break;
 			case 2:
 			{
@@ -60,19 +68,21 @@ int main()
 				}
 				else
 					cout << "No puedes quitar el valor en (" << f << " , " << c << " )" << endl; 
-				mostrar_juego_consola(s);
+				
 			}
 			break;
 			case 3:
 			{
 				reset(s);
-				mostrar_juego_consola(s);
+				
 			}
 			break;
 			case 4:
 			{
 				cout << "Fila y columna entre 1...9: ";
 				cin >> f >> c;
+
+				if(posibles_valores(s, f - 1, c - 1) != 0){
 				cout << "Los valores posibles para la celda son: { ";
 				int v = 1;
 				while (v <= 9)
@@ -83,14 +93,18 @@ int main()
 					}
 					v++;
 				}
-				cout << " }";
-				mostrar_juego_consola(s);
+				cout << " }" << endl;
+				}else{
+					cout << "Vaya, no hay ningún valor posible en esa posición" << endl;
+				}
+
+				
 			}
 			break;
 			case 5:
 			{
 				autocompleta(s);
-				mostrar_juego_consola(s);
+				
 			}
 			break;
 
@@ -100,6 +114,12 @@ int main()
 				break;
 			}
 		} while (!terminado(s) && opcion != 6);
+
+		if(terminado(s)){
+			cout << "Muy bien! te has pasado el juego";
+		}else{
+			cout << "Has salido del juego";
+		}
 	}
 	else
 	{
@@ -127,7 +147,18 @@ int pedir_opcion_valida()
 	{
 		cout << "Elige una opcion: ";
 		cin >> opcion;
-	} while (opcion <= 1 && opcion > 6);
+	} while (opcion < 1 || opcion > 6);
 
 	return opcion;
+}
+
+void mostrar_casillas_bloqueadas(const tSudoku& s){
+
+	int n = dame_num_celda_bloqueadas(s);
+	int f, c;
+	for(int i = 0; i < n; i++){
+
+		dame_celda_bloqueada(s, i, f, c);
+		cout << "(" << f + 1 << "," << c + 1 << ")"; 
+	}
 }
