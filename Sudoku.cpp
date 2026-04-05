@@ -179,25 +179,31 @@ bool pon_valor(tSudoku& s, int f, int c, int v)
 	return ok;
 }
 
-void elimina_celdas_bloqueadas(tSudoku& s){
+//TODO: Hacer
+bool esta_en_zona_relevante(){
+	return true;
+}
+
+bool esta_en_zona_relevante(int f, int f_temp, int c, int c_temp){
+	return (f == f_temp) || (c == c_temp) || (f_temp / 3 == f / 3 && c_temp / 3 == c / 3);
+}
+
+void elimina_celdas_bloqueadas(tSudoku& s, int f, int c){
 	
-	bool hay_cambios = false;
-	int p = 0;
-	int f;
-	int c;
+	tPosicion pos;
 
-	while(p < s.celdas_bloqueadas.cont){
+	for(int i = 0; i < s.celdas_bloqueadas.cont; i++){
 		
-		dame_celda_bloqueada(s, p, f, c);
+		int f_temp = s.celdas_bloqueadas.bloqueadas[i].fila;
+		int c_temp = s.celdas_bloqueadas.bloqueadas[i].columna;
 
-		if(posibles_valores != 0){
+		if(esta_en_zona_relevante(f, f_temp, c, c_temp)){
 
-			for(int i = p; i < s.celdas_bloqueadas.cont - 1; i++){
-				s.celdas_bloqueadas.bloqueadas[i] = s.celdas_bloqueadas.bloqueadas[i + 1];
+			if(posibles_valores(s, f_temp, c_temp) > 0){
+				pos = s.celdas_bloqueadas.bloqueadas[i];
+				elimina_celda_bloqueada(s, pos);
+				i--;
 			}
-			s.celdas_bloqueadas.cont--;
-		}else{
-			p++;
 		}
 
 	}
@@ -212,7 +218,7 @@ bool quita_valor(tSudoku& s, int f, int c)
 		pon_vacia(s.tablero.matriz[f][c]);
 		pon_valor(s.tablero.matriz[f][c], 0);
 
-		elimina_celdas_bloqueadas(s);
+		elimina_celdas_bloqueadas(s, f, c);
 		s.cont_numeros--;
 		ok = true;
 	}
@@ -299,3 +305,31 @@ int posibles_valores(tSudoku& s, int f, int c)
 	return num;
 }
 
+void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos){
+	
+	s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont] = pos;
+}
+
+void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos){
+
+	bool encontrada = false;
+	int p = 0;
+
+	while(p < s.celdas_bloqueadas.cont && !encontrada){
+
+		if(s.celdas_bloqueadas.bloqueadas[p].fila == pos.fila &&
+		s.celdas_bloqueadas.bloqueadas[p].columna == pos.columna)
+		{
+
+			encontrada = true;
+			for(int i = p; i < s.celdas_bloqueadas.cont - 1; i++){
+				s.celdas_bloqueadas.bloqueadas[i] = s.celdas_bloqueadas.bloqueadas[i + 1];
+			}
+
+			s.celdas_bloqueadas.cont--;
+
+		}else{
+			p++;
+		}
+	}
+}
