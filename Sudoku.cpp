@@ -140,7 +140,7 @@ bool es_valor_posible(const tSudoku& s, int f, int c, int v)
 		!esta_valor_en_columna(s, c, v) && !esta_valor_en_bloque(s, f, c, v));
 }
 
-void busca_celdas_bloqueadas(tSudoku& s)
+void actualiza_celdas_bloqueadas(tSudoku& s)
 {
 
 	s.celdas_bloqueadas.cont = 0;
@@ -171,7 +171,7 @@ bool pon_valor(tSudoku& s, int f, int c, int v)
 		pon_ocupada(s.tablero.matriz[f][c]);
 		s.cont_numeros++;
 
-		busca_celdas_bloqueadas(s);
+		actualiza_celdas_bloqueadas(s);
 
 		ok = true;
 	}
@@ -181,17 +181,41 @@ bool pon_valor(tSudoku& s, int f, int c, int v)
 bool quita_valor(tSudoku& s, int f, int c)
 {
 	bool ok = false;
-	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f >= 0 && f < 9)
+	if (!es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)) && f >= 0 && f < DIM && c >= 0 && c < DIM)
 	{
 
 		pon_vacia(s.tablero.matriz[f][c]);
 		pon_valor(s.tablero.matriz[f][c], 0);
 
-		busca_celdas_bloqueadas(s);
+		elimina_celdas_bloqueadas(s);
 		s.cont_numeros--;
 		ok = true;
 	}
 	return ok;
+}
+
+void elimina_celdas_bloqueadas(tSudoku& s){
+	
+	bool hay_cambios = false;
+	int p = 0;
+	int f;
+	int c;
+
+	while(p < s.celdas_bloqueadas.cont){
+		
+		dame_celda_bloqueada(s, p, f, c);
+
+		if(posibles_valores != 0){
+
+			for(int i = p; i < s.celdas_bloqueadas.cont - 1; i++){
+				s.celdas_bloqueadas.bloqueadas[i] = s.celdas_bloqueadas.bloqueadas[i + 1];
+			}
+			s.celdas_bloqueadas.cont--;
+		}else{
+			p++;
+		}
+
+	}
 }
 
 int num_celdas_originales(const tSudoku& s){
@@ -213,9 +237,8 @@ void reset(tSudoku& s)
 	{
 		for (int j = 0; j < DIM; j++)
 		{
-			quita_valor(s, i, j);
-			if (es_ocupada(dame_celda(s, i, j)))
-				pon_vacia(s.tablero.matriz[i][j]);
+			quita_valor(s, i, j);		
+
 		}
 	}
 
