@@ -179,11 +179,6 @@ bool pon_valor(tSudoku& s, int f, int c, int v)
 	return ok;
 }
 
-//TODO: Hacer
-bool esta_en_zona_relevante(){
-	return true;
-}
-
 bool esta_en_zona_relevante(int f, int f_temp, int c, int c_temp){
 	return (f == f_temp) || (c == c_temp) || (f_temp / 3 == f / 3 && c_temp / 3 == c / 3);
 }
