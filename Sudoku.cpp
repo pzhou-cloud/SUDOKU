@@ -1,24 +1,29 @@
 #include "Sudoku.h"
 
-//Métodos privados sesión 5:
+//Métodos privados de la versión 2:
 void add_casillas_afectadas(tSudoku& s, int fila, int columna, int v);
 void marca_valor_imposible(tSudoku& s, int f, int c, int v);
 void quita_un_valor_imposible(tSudoku& s, int f, int c, int v);
 void insertar_valor(tSudoku& s, int f, int c, int v);
 void eliminar_valor(tSudoku& s, int f, int c, int v);
 void remove_casillas_afectadas(tSudoku& s, int fila, int columna, int v);
-void eliminar_valor(tSudoku& s, int f, int c, int v);
 
-//TODO: Agregar declaración métodos privados de otras sesiones
-//(Si no desaparecen al terminar la 5)
+//Métodos privados de la versión 1:
+int posibles_valores(const tSudoku& s, int f, int c);
+void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos);
+void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos);
+int num_celdas_originales(const tSudoku& s);
+bool esta_en_zona_relevante(int f, int f_temp, int c, int c_temp);
+
+
 
 void inicializaSudoku(tSudoku& s)
 {	
 	inicializaTablero(s.tablero, DIM);
 	s.cont_numeros = 0;
 	s.celdas_bloqueadas.cont = 0;
-	s.valores_celda.nFilas = 0;
-	s.valores_celda.nColumnas = 0;
+	s.valores_celda.nFilas = DIM;
+	s.valores_celda.nColumnas = DIM;
 
 	for(int f = 0; f < DIM; f++){
 		for(int c = 0; c < DIM; c++){
@@ -278,7 +283,7 @@ void autocompleta(tSudoku& s)
 	} while (hay_cambios);
 }
 
-int posibles_valores(tSudoku& s, int f, int c)
+int posibles_valores(const tSudoku& s, int f, int c)
 {
 	int v = 1;
 	int num = 0;
@@ -301,6 +306,7 @@ int posibles_valores(tSudoku& s, int f, int c)
 void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos){
 	
 	s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont] = pos;
+	s.celdas_bloqueadas.cont++;
 }
 
 void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos){
@@ -373,7 +379,7 @@ void add_casillas_afectadas(tSudoku& s, int f, int c, int v){
 
 	for (int i = 0; i < DIM; i++) {
         for (int j = 0; j < DIM; j++) {
-			
+
             if ((i != f || j != c) && esta_en_zona_relevante(f, i, c, j)) {
                 marca_valor_imposible(s, i, j, v);
             }

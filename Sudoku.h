@@ -54,5 +54,5 @@ bool pon_valor(tSudoku& s, int f, int c, int v);
 bool quita_valor(tSudoku& s, int f, int c);
 void reset(tSudoku& s);
 void autocompleta(tSudoku& s);
-int posibles_valores(tSudoku& s, int f, int c); 
+int posibles_valores(const tSudoku& s, int f, int c); 
 
