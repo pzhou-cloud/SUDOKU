@@ -4,7 +4,7 @@
 #include <fstream>
 using namespace std;
 
-const int MAX_VALORES = 9;
+
 struct tPosicion {
 	int fila, columna;
 };

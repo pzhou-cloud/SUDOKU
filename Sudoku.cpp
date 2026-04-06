@@ -101,11 +101,6 @@ void dame_celda_bloqueada(const tSudoku& s, int p, int& f, int& c)
 	c = s.celdas_bloqueadas.bloqueadas[p].columna;
 }
 
-bool nombre_temporal(const tSudoku& s, int f, int c, int v)
-{
-	return es_vacia(dame_celda(s,f,c)) && valor_dentro_de_limites(v);
-}
-
 
 bool es_valor_posible(const tSudoku& s, int f, int c, int v)
 {
@@ -302,7 +297,7 @@ void remove_casillas_afectadas(tSudoku& s, int f, int c, int v){
         for (int j = 0; j < DIM; j++) {
 
             if ((i != f || j != c) && esta_en_zona_relevante(f, i, c, j)) {
-                quita_valor_imposible(s, i, j, v);
+                quita_un_valor_imposible(s, i, j, v);
             }
         }
     }
