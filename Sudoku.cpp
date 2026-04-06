@@ -371,36 +371,14 @@ void quita_un_valor_imposible(tSudoku& s, int f, int c, int v){
 
 void add_casillas_afectadas(tSudoku& s, int f, int c, int v){
 
-	for(int j = 0; j < DIM; j++){
-
-		if(j != c){
-			marca_valor_imposible(s, f, j, v);
-
-		}
-
-	}
-
-	for(int i = 0; i < DIM; i++){
-
-		if(i != f){
-			marca_valor_imposible(s, i, c, v);
-
-		}
-	}
-
-	int fila_esquina_submatriz = f / 3 * 3;
-	int columna_esquina_submatriz = c / 3 * 3;
-
-	for(int i = fila_esquina_submatriz; i < fila_esquina_submatriz + 3; i++){
-		for(int j = columna_esquina_submatriz; j < columna_esquina_submatriz + 3; j++){
-
-			if(i != f && j != c){
-				marca_valor_imposible(s, i, j, v);
-
-			}
-
-		}
-	}
+	for (int i = 0; i < DIM; i++) {
+        for (int j = 0; j < DIM; j++) {
+			
+            if ((i != f || j != c) && esta_en_zona_relevante(f, i, c, j)) {
+                marca_valor_imposible(s, i, j, v);
+            }
+        }
+    }
 
 }
 
