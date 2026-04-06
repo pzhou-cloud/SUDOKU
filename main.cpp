@@ -94,8 +94,10 @@ int main()
 					v++;
 				}
 				cout << " }" << endl;
+				}else if(es_vacia(dame_celda(s, f - 1, c - 1))){
+					cout << "Nono, esa celda ya está ocupada" << endl;
 				}else{
-					cout << "Vaya, no hay ningún valor posible en esa posición" << endl;
+					cout << "Vaya, no hay ningún valor posible ahí" << endl;
 				}
 
 				

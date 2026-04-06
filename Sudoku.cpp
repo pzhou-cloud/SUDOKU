@@ -1,6 +1,6 @@
 #include "Sudoku.h"
 
-//Métodos privados de la versión 2:
+//Métodos privados versión 2:
 void add_casillas_afectadas(tSudoku& s, int fila, int columna, int v);
 void marca_valor_imposible(tSudoku& s, int f, int c, int v);
 void quita_un_valor_imposible(tSudoku& s, int f, int c, int v);
@@ -8,18 +8,19 @@ void insertar_valor(tSudoku& s, int f, int c, int v);
 void eliminar_valor(tSudoku& s, int f, int c, int v);
 void remove_casillas_afectadas(tSudoku& s, int fila, int columna, int v);
 
-//Métodos privados de la versión 1:
+//Métodos privados versión 1:
 int posibles_valores(const tSudoku& s, int f, int c);
 void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos);
 void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos);
-int num_celdas_originales(const tSudoku& s);
 bool esta_en_zona_relevante(int f, int f_temp, int c, int c_temp);
+bool posicion_dentro_de_limites(int f, int c);
+bool valor_valido(int v);
 
 
 
 void inicializaSudoku(tSudoku& s)
 {	
-	inicializaTablero(s.tablero, DIM);
+	inicializaTablero(s.tablero);
 	s.cont_numeros = 0;
 	s.celdas_bloqueadas.cont = 0;
 	s.valores_celda.nFilas = DIM;
@@ -51,12 +52,16 @@ void carga_sudoku(ifstream& archivo, tSudoku& s)
 			archivo >> value;
 
 			if (value == 0)
-			{
-				inicializaCelda(s.tablero.matriz[i][j]);
+			{	
+				tCelda celda;
+				inicializaCelda(celda);
+				pon_elemento(s.tablero, i, j, celda);
 			}
 			else
-			{
-				inicializaCelda(s.tablero.matriz[i][j], value, ORIGINAL);
+			{	
+				tCelda celda;
+				inicializaCelda(celda, value, ORIGINAL);
+				pon_elemento(s.tablero, i, j, celda);
 				s.cont_numeros++;
 				add_casillas_afectadas(s, i, j, value);
 			}
@@ -97,73 +102,9 @@ void dame_celda_bloqueada(const tSudoku& s, int p, int& f, int& c)
 
 bool nombre_temporal(const tSudoku& s, int f, int c, int v)
 {
-	return es_vacia(dame_celda(s,f,c)) && (v >= 1 && v <= 9);
+	return es_vacia(dame_celda(s,f,c)) && valor_dentro_de_limites(v);
 }
 
-bool esta_valor_en_fila(const tSudoku& s, int f, int v)
-{
-
-	bool ok = false;
-	int c = 0;
-
-	while (ok == false && c < DIM)
-	{
-		if (dame_valor(dame_celda(s, f, c))== v)
-		{
-			ok = true;
-		}
-		c++;
-	}
-
-	return ok;
-}
-
-bool esta_valor_en_columna(const tSudoku& s, int c, int v)
-{
-
-	bool ok = false;
-	int f = 0;
-
-	while (ok == false && f < DIM)
-	{
-		
-		if (dame_valor(dame_celda(s, f, c)) == v)
-		{
-			ok = true;
-		}
-		f++;
-	}
-
-	return ok;
-}
-
-bool esta_valor_en_bloque(const tSudoku& s, int f, int c, int v)
-{
-
-	bool ok = false;
-	int f_esquina_bloque = f / 3 * 3;
-	int c_esquina_bloque = c / 3 * 3;
-	int i = f_esquina_bloque;
-	int j = c_esquina_bloque;
-
-	while (!ok && i < f_esquina_bloque + 3)
-	{
-
-		j = c_esquina_bloque;
-
-		while (!ok && j < c_esquina_bloque + 3)
-		{
-			if (dame_valor(dame_celda(s, i, j)) == v)
-			{
-				ok = true;
-			}
-			j++;
-		}
-		i++;
-	}
-
-	return ok;
-}
 
 bool es_valor_posible(const tSudoku& s, int f, int c, int v)
 {
@@ -195,7 +136,7 @@ bool pon_valor(tSudoku& s, int f, int c, int v)
 
 	bool ok = false;
 
-	if (es_valor_posible(s, f, c, v) && f >= 0 && f < DIM && c >= 0 && c < DIM && v >= 1 && v <= 9)
+	if (es_valor_posible(s, f, c, v) && posicion_dentro_de_limites(f, c) && v >= 1 && v <= 9)
 	{
 
 		insertar_valor(s, f, c, v);
@@ -214,7 +155,7 @@ bool esta_en_zona_relevante(int f, int f_temp, int c, int c_temp){
 bool quita_valor(tSudoku& s, int f, int c)
 {
 	bool ok = false;
-	if (f >= 0 && f < DIM && c >= 0 && c < DIM && !es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)))
+	if (posicion_dentro_de_limites(f, c) && !es_vacia(dame_celda(s, f, c)) && !es_original(dame_celda(s, f, c)))
 	{
 
 		eliminar_valor(s, f, c, dame_celda(s, f, c).valor);
@@ -223,20 +164,6 @@ bool quita_valor(tSudoku& s, int f, int c)
 	return ok;
 }
 
-
-
-int num_celdas_originales(const tSudoku& s){
-	int suma = 0;
-	for(int i = 0; i < DIM; i++){
-		for(int j = 0; j < DIM; j++){
-			if(es_original(dame_celda(s, i, j))){
-				suma++;
-			}
-		}
-	}
-
-	return suma;
-}
 void reset(tSudoku& s)
 {
 
@@ -249,8 +176,6 @@ void reset(tSudoku& s)
 		}
 	}
 
-	
-	s.cont_numeros = num_celdas_originales(s);
 	s.celdas_bloqueadas.cont = 0;
 }
 
@@ -425,8 +350,10 @@ void remove_casillas_afectadas(tSudoku& s, int f, int c, int v){
 
 void insertar_valor(tSudoku& s, int f, int c, int v){
 
-	pon_valor(s.tablero.matriz[f][c], v);
-	pon_ocupada(s.tablero.matriz[f][c]);
+	tCelda celda = dame_celda(s, f, c);
+	pon_valor(celda, v);
+	pon_ocupada(celda);
+	pon_elemento(s.tablero, f, c, celda);
 	s.cont_numeros++;
 	add_casillas_afectadas(s, f, c, v);
 
@@ -434,8 +361,18 @@ void insertar_valor(tSudoku& s, int f, int c, int v){
 
 void eliminar_valor(tSudoku& s, int f, int c, int v){
 
-	pon_vacia(s.tablero.matriz[f][c]);
-	pon_valor(s.tablero.matriz[f][c], 0);
+	tCelda celda = dame_celda(s, f, c);
+	pon_vacia(celda);
+	pon_valor(celda, 0);
+	pon_elemento(s.tablero, f, c, celda);
 	s.cont_numeros--;
 	remove_casillas_afectadas(s, f, c, v);
+}
+
+bool posicion_dentro_de_limites(int f, int c){
+	return f >= 0 && f < DIM && c >= 0 && c < DIM;
+}
+
+bool valor_dentro_de_limites(int v){
+	return v >= 1 && v <= MAX_VALORES;
 }

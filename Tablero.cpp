@@ -1,7 +1,7 @@
 #include "Tablero.h"
 
 void inicializaTablero(tTablero& t) {
-	t.dimension = 0;
+	t.dimension = DIM;
 }
 void inicializaTablero(tTablero& t, int d) {
 	t.dimension = d;
