@@ -14,15 +14,15 @@ void inicializaSudoku(tSudoku& s)
 	inicializaTablero(s.tablero, DIM);
 	s.cont_numeros = 0;
 	s.celdas_bloqueadas.cont = 0;
-	s.valores.nFilas = 0;
-	s.valores.nColumnas = 0;
+	s.valores_celda.nFilas = 0;
+	s.valores_celda.nColumnas = 0;
 
 	for(int f = 0; f < DIM; f++){
 		for(int c = 0; c < DIM; c++){
 			for(int v = 0; v < MAX_VALORES; v++){
 
-				s.valores.valores[f][c][v].posible = true;
-				s.valores.valores[f][c][v].celdas_que_afectan = 0;
+				s.valores_celda.valores[f][c][v].posible = true;
+				s.valores_celda.valores[f][c][v].celdas_que_afectan = 0;
 
 			}
 		}
@@ -159,8 +159,7 @@ bool esta_valor_en_bloque(const tSudoku& s, int f, int c, int v)
 bool es_valor_posible(const tSudoku& s, int f, int c, int v)
 {
 
-	return (nombre_temporal(s, f, c, v) && !esta_valor_en_fila(s, f, v) &&
-		!esta_valor_en_columna(s, c, v) && !esta_valor_en_bloque(s, f, c, v));
+	return s.valores_celda.valores[f][c][v-1].posible && es_vacia(dame_celda(s, f, c));
 }
 
 void actualiza_celdas_bloqueadas(tSudoku& s)
@@ -310,9 +309,9 @@ int posibles_valores(tSudoku& s, int f, int c)
 
 	if (es_vacia(dame_celda(s, f, c)))
 	{
-		while (v <= 9)
+		while (v <= MAX_VALORES)
 		{
-			if (es_valor_posible(s, f, c, v))
+			if (s.valores_celda.valores[f][c][v-1].posible)
 			{
 				num++;
 			}

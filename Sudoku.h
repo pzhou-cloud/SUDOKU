@@ -29,7 +29,7 @@ typedef struct {
 	tTablero tablero;
 	int cont_numeros;
 	tBloqueos celdas_bloqueadas;
-	tValores valores;
+	tValores valores_celda;
 
 }tSudoku;
 
