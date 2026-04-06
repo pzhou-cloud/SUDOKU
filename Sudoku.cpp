@@ -42,11 +42,12 @@ void carga_sudoku(ifstream& archivo, tSudoku& s)
 {
 
 	int value;
-	archivo >> s.tablero.dimension;
+	int tablero_dimension;
+	archivo >> tablero_dimension;
 
-	for (int i = 0; i < dame_dimension(s); i++)
+	for (int i = 0; i < tablero_dimension; i++)
 	{
-		for (int j = 0; j < dame_dimension(s); j++)
+		for (int j = 0; j < tablero_dimension; j++)
 		{
 
 			archivo >> value;
@@ -112,24 +113,6 @@ bool es_valor_posible(const tSudoku& s, int f, int c, int v)
 	return s.valores_celda.valores[f][c][v-1].posible && es_vacia(dame_celda(s, f, c));
 }
 
-void actualiza_celdas_bloqueadas(tSudoku& s)
-{
-
-	s.celdas_bloqueadas.cont = 0;
-
-	for (int f = 0; f < DIM; f++)
-	{
-		for (int c = 0; c < DIM; c++)
-		{
-			if (posibles_valores(s, f, c) == 0)
-			{
-				s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont].fila = f;
-				s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont].columna = c;
-				s.celdas_bloqueadas.cont++;
-			}
-		}
-	}
-}
 
 bool pon_valor(tSudoku& s, int f, int c, int v)
 {
@@ -315,37 +298,14 @@ void add_casillas_afectadas(tSudoku& s, int f, int c, int v){
 
 void remove_casillas_afectadas(tSudoku& s, int f, int c, int v){
 
-	for(int j = 0; j < DIM; j++){
+	for (int i = 0; i < DIM; i++) {
+        for (int j = 0; j < DIM; j++) {
 
-		if(j != c){
-			quita_un_valor_imposible(s, f, j, v);
-
-		}
-
-	}
-
-	for(int i = 0; i < DIM; i++){
-
-		if(i != f){
-			quita_un_valor_imposible(s, i, c, v);
-
-		}
-	}
-
-	int fila_esquina_submatriz = f / 3 * 3;
-	int columna_esquina_submatriz = c / 3 * 3;
-
-	for(int i = fila_esquina_submatriz; i < fila_esquina_submatriz + 3; i++){
-		for(int j = columna_esquina_submatriz; j < columna_esquina_submatriz + 3; j++){
-
-			if(i != f && j != c){
-				quita_un_valor_imposible(s, i, j, v);
-
-			}
-
-		}
-	}
-
+            if ((i != f || j != c) && esta_en_zona_relevante(f, i, c, j)) {
+                quita_valor_imposible(s, i, j, v);
+            }
+        }
+    }
 }
 
 void insertar_valor(tSudoku& s, int f, int c, int v){
