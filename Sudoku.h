@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
+
+const int MAX_VALORES = 9;
 struct tPosicion {
 	int fila, columna;
 };
@@ -12,12 +14,24 @@ struct tBloqueos {
 	tPosicion bloqueadas[DIM * DIM];
 };
 
-struct tSudoku {
+typedef struct {
+	bool posible;
+	int celdas_que_afectan;
+}tValor;
+
+typedef struct {
+	int nFilas;
+	int nColumnas;
+	tValor valores[DIM][DIM][MAX_VALORES];
+}tValores;
+
+typedef struct {
 	tTablero tablero;
 	int cont_numeros;
 	tBloqueos celdas_bloqueadas;
+	tValores valores;
 
-};
+}tSudoku;
 
 void inicializaSudoku(tSudoku& s);
 void carga_sudoku(ifstream& archivo, tSudoku& s);

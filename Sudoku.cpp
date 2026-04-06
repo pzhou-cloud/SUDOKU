@@ -1,9 +1,32 @@
 #include "Sudoku.h"
 
+//Métodos privados sesión 5:
+void add_casillas_afectadas(tSudoku& s, int fila, int columna, int v);
+void insertar_valor(tSudoku& s, int f, int c, int v);
+void remove_casillas_afectadas(tSudoku& s, int fila, int columna, int v);
+void eliminar_valor(tSudoku& s, int f, int c, int v);
+
+//TODO: Agregar declaración métodos privados de otras sesiones
+//(Si no desaparecen al terminar la 5)
+
 void inicializaSudoku(tSudoku& s)
-{
+{	
+	inicializaTablero(s.tablero, DIM);
 	s.cont_numeros = 0;
 	s.celdas_bloqueadas.cont = 0;
+	s.valores.nFilas = 0;
+	s.valores.nColumnas = 0;
+
+	for(int f = 0; f < DIM; f++){
+		for(int c = 0; c < DIM; c++){
+			for(int v = 0; v < MAX_VALORES; v++){
+
+				s.valores.valores[f][c][v].posible = true;
+				s.valores.valores[f][c][v].celdas_que_afectan = 0;
+
+			}
+		}
+	}
 }
 
 void carga_sudoku(ifstream& archivo, tSudoku& s)
@@ -328,3 +351,6 @@ void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos){
 		}
 	}
 }
+
+
+
