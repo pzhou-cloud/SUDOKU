@@ -16,7 +16,7 @@ int main()
 	int n;
 	int f, c;
 	int value;
-	string nombre_fichero = "sudoku_1.txt";
+	string nombre_fichero = "sudoku_2.txt";
 	archivo.open(nombre_fichero);
 	if (archivo.is_open())
 	{
@@ -111,8 +111,7 @@ int main()
 			break;
 
 			case 6:
-				// Nada, se sale del bucle
-				cout << "Juego terminado"; 
+
 				break;
 			}
 		} while (!terminado(s) && opcion != 6);
@@ -120,7 +119,7 @@ int main()
 		if(terminado(s)){
 			cout << "Muy bien! te has pasado el juego";
 		}else{
-			cout << "Has salido del juego";
+			cout << "Has salido del juego" << endl;
 		}
 	}
 	else
