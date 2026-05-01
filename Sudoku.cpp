@@ -51,7 +51,6 @@ void carga_sudoku(ifstream& archivo, tSudoku& s)
 		{
 
 			archivo >> value;
-
 			if (value == 0)
 			{	
 				tCelda celda;
@@ -97,8 +96,8 @@ int dame_num_celda_bloqueadas(const tSudoku& s)
 
 void dame_celda_bloqueada(const tSudoku& s, int p, int& f, int& c)
 {
-	f = s.celdas_bloqueadas.bloqueadas[p].fila;
-	c = s.celdas_bloqueadas.bloqueadas[p].columna;
+	f = s.celdas_bloqueadas.bloqueadas[p]->fila;
+	c = s.celdas_bloqueadas.bloqueadas[p]->columna;
 }
 
 
@@ -207,8 +206,10 @@ int posibles_valores(const tSudoku& s, int f, int c)
 }
 
 void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos){
-	
-	s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont] = pos;
+	tPosicion nueva = new tPos; 
+	nueva->fila = pos->fila; 
+	nueva->columna = pos->columna; 
+	s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont] = nueva;
 	s.celdas_bloqueadas.cont++;
 }
 
@@ -219,10 +220,10 @@ void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos){
 
 	while(p < s.celdas_bloqueadas.cont && !encontrada){
 
-		if(s.celdas_bloqueadas.bloqueadas[p].fila == pos.fila &&
-		s.celdas_bloqueadas.bloqueadas[p].columna == pos.columna)
+		if(s.celdas_bloqueadas.bloqueadas[p]->fila == pos->fila &&
+		s.celdas_bloqueadas.bloqueadas[p]->columna == pos->columna  )
 		{
-
+			delete s.celdas_bloqueadas.bloqueadas[p]; 
 			encontrada = true;
 			for(int i = p; i < s.celdas_bloqueadas.cont - 1; i++){
 				s.celdas_bloqueadas.bloqueadas[i] = s.celdas_bloqueadas.bloqueadas[i + 1];
@@ -250,8 +251,8 @@ void marca_valor_imposible(tSudoku& s, int f, int c, int v){
 	if(!esta_ya_bloqueada && posibles_valores(s, f, c) == 0 && es_vacia(dame_celda(s, f, c))){
 
 		tPosicion posicion_bloqueada;
-		posicion_bloqueada.fila = f;
-		posicion_bloqueada.columna = c;
+		posicion_bloqueada->fila = f;
+		posicion_bloqueada->columna = c;
 		inserta_celda_bloqueada(s, posicion_bloqueada);
 	}
 }
@@ -272,8 +273,8 @@ void quita_un_valor_imposible(tSudoku& s, int f, int c, int v){
 
 	if(esta_ya_bloqueada && posibles_valores(s, f, c) > 0 && es_vacia(dame_celda(s, f, c))){
 		tPosicion posicion_desbloqueada;
-		posicion_desbloqueada.fila = f;
-		posicion_desbloqueada.columna = c;
+		posicion_desbloqueada->fila = f;
+		posicion_desbloqueada->columna = c;
 		elimina_celda_bloqueada(s, posicion_desbloqueada);
 	}
 }
@@ -305,12 +306,13 @@ void remove_casillas_afectadas(tSudoku& s, int f, int c, int v){
 
 void insertar_valor(tSudoku& s, int f, int c, int v){
 
-	tCelda celda = dame_celda(s, f, c);
-	pon_valor(celda, v);
-	pon_ocupada(celda);
+	tCelda celda = dame_celda(s, f, c); 
+	pon_valor(celda, v); 
+	pon_ocupada(celda); 
 	pon_elemento(s.tablero, f, c, celda);
-	s.cont_numeros++;
-	add_casillas_afectadas(s, f, c, v);
+	
+	s.cont_numeros++; 
+	add_casillas_afectadas(s, f, c, v); 
 
 }
 
@@ -330,4 +332,54 @@ bool posicion_dentro_de_limites(int f, int c){
 
 bool valor_dentro_de_limites(int v){
 	return v >= 1 && v <= MAX_VALORES;
+}
+
+
+
+// nuevo
+void destruir(tSudoku& s) {
+	for (int i = 0; i < s.celdas_bloqueadas.cont; i++) {
+		delete s.celdas_bloqueadas.bloqueadas[i]; 
+
+	}
+	s.celdas_bloqueadas.cont = 0; 
+
+}
+
+int dame_num_celdas_libre(tSudoku& s) {
+	return DIM * DIM - s.cont_numeros - s.celdas_bloqueadas.cont;
+}
+
+void inicializaSudokuCopia(tSudoku& s1, const tSudoku& s2) {
+	s1.tablero = s2.tablero; 
+	s1.valores_celda = s2.valores_celda; 
+	s1.cont_numeros = s2.cont_numeros;
+	s1.celdas_bloqueadas.cont = s2.celdas_bloqueadas.cont;
+
+	for (int i = 0; i < s1.cont_numeros; i++) {
+		s1.celdas_bloqueadas.bloqueadas[i] = new tPosicion();
+		s1.celdas_bloqueadas.bloqueadas[i]->fila = s2.celdas_bloqueadas.bloqueadas[i]->fila;
+		s1.celdas_bloqueadas.bloqueadas[i]->columna = s2.celdas_bloqueadas.bloqueadas[i]->columna;
+	}
+	}
+	
+}
+void copiaIndependiente(tSudoku& s1, const tSudoku& s2) {
+
+	if (&s1 != &s2) {
+		for (int i = 0; i < s1.celdas_bloqueadas.cont; i++) {
+			delete s1.celdas_bloqueadas.bloqueadas[i];
+		}
+		s1.tablero = s2.tablero;
+		s1.valores_celda = s2.valores_celda;
+		s1.cont_numeros = s2.cont_numeros;
+		s1.celdas_bloqueadas.cont = s2.celdas_bloqueadas.cont;
+		for (int i = 0; i < s1.cont_numeros; i++) {
+			s1.celdas_bloqueadas.bloqueadas[i] = new tPosicion();
+			s1.celdas_bloqueadas.bloqueadas[i]->fila = s2.celdas_bloqueadas.bloqueadas[i]->fila;
+			s1.celdas_bloqueadas.bloqueadas[i]->columna = s2.celdas_bloqueadas.bloqueadas[i]->columna;
+
+		}
+	}
+	
 }
