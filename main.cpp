@@ -11,6 +11,7 @@ void mostrar_casillas_bloqueadas(const tSudoku& s);
 
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	ifstream archivo;
 	tSudoku s;
 	int n;
