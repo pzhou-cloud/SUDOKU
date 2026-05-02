@@ -3,9 +3,10 @@
 #include "ListaSudokus.h"
 #include "inputOutput.h"
 
-//Recordatorio para Peipei: Yo estoy en Linux y al parecer la wea esa
-//de memoryleaks usa cosas exclusivas para windows entonces se me crashea
-//descomenta el include y lo del CrtSet de abajo cuando lo vayas a usar
+//Nota para Peipei: Yo estoy en Linux y al parecer lo de
+//memoryleaks usa cosas exclusivas para windows y no funciona.
+
+//Descomenta el include y lo del CrtSet de abajo cuando lo vayas a usar
 
 //#include "memoryleaks.h"
 
