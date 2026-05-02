@@ -1,7 +1,14 @@
 #include <iostream>
 #include <fstream>
-#include "Sudoku.h"
+#include "ListaSudokus.h"
 #include "inputOutput.h"
+
+//Recordatorio para Peipei: Yo estoy en Linux y al parecer la wea esa
+//de memoryleaks usa cosas exclusivas para windows entonces se me crashea
+//descomenta el include y lo del CrtSet de abajo cuando lo vayas a usar
+
+//#include "memoryleaks.h"
+
 
 using namespace std;
 
@@ -11,7 +18,7 @@ void mostrar_casillas_bloqueadas(const tSudoku& s);
 
 int main()
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	ifstream archivo;
 	tSudoku s;
 	int n;

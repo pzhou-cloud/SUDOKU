@@ -5,13 +5,13 @@
 using namespace std;
 
 
-struct tPos{
+struct tPosicion{
 	int fila, columna;
 }; 
-typedef tPos* tPosicion; 
+
 struct tBloqueos {
 	int cont;
-	tPosicion bloqueadas[DIM * DIM];
+	tPosicion* bloqueadas[DIM * DIM];
 };
 
 
@@ -57,7 +57,7 @@ void autocompleta(tSudoku& s);
 int posibles_valores(const tSudoku& s, int f, int c); 
 
 // nuevo
-void destruir(tSudoku& s);
+void destruye(tSudoku& s);
 int dame_num_celdas_libre(tSudoku& s);
 
 void inicializaSudokuCopia(tSudoku& s1, const tSudoku& s2); 

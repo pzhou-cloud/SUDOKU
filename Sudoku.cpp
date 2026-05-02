@@ -206,9 +206,9 @@ int posibles_valores(const tSudoku& s, int f, int c)
 }
 
 void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos){
-	tPosicion nueva = new tPos; 
-	nueva->fila = pos->fila; 
-	nueva->columna = pos->columna; 
+	tPosicion* nueva = new tPosicion; 
+	nueva->fila = pos.fila; 
+	nueva->columna = pos.columna; 
 	s.celdas_bloqueadas.bloqueadas[s.celdas_bloqueadas.cont] = nueva;
 	s.celdas_bloqueadas.cont++;
 }
@@ -220,8 +220,8 @@ void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos){
 
 	while(p < s.celdas_bloqueadas.cont && !encontrada){
 
-		if(s.celdas_bloqueadas.bloqueadas[p]->fila == pos->fila &&
-		s.celdas_bloqueadas.bloqueadas[p]->columna == pos->columna  )
+		if(s.celdas_bloqueadas.bloqueadas[p]->fila == pos.fila &&
+		s.celdas_bloqueadas.bloqueadas[p]->columna == pos.columna  )
 		{
 			delete s.celdas_bloqueadas.bloqueadas[p]; 
 			encontrada = true;
@@ -251,8 +251,8 @@ void marca_valor_imposible(tSudoku& s, int f, int c, int v){
 	if(!esta_ya_bloqueada && posibles_valores(s, f, c) == 0 && es_vacia(dame_celda(s, f, c))){
 
 		tPosicion posicion_bloqueada;
-		posicion_bloqueada->fila = f;
-		posicion_bloqueada->columna = c;
+		posicion_bloqueada.fila = f;
+		posicion_bloqueada.columna = c;
 		inserta_celda_bloqueada(s, posicion_bloqueada);
 	}
 }
@@ -273,8 +273,8 @@ void quita_un_valor_imposible(tSudoku& s, int f, int c, int v){
 
 	if(esta_ya_bloqueada && posibles_valores(s, f, c) > 0 && es_vacia(dame_celda(s, f, c))){
 		tPosicion posicion_desbloqueada;
-		posicion_desbloqueada->fila = f;
-		posicion_desbloqueada->columna = c;
+		posicion_desbloqueada.fila = f;
+		posicion_desbloqueada.columna = c;
 		elimina_celda_bloqueada(s, posicion_desbloqueada);
 	}
 }
@@ -337,7 +337,7 @@ bool valor_dentro_de_limites(int v){
 
 
 // nuevo
-void destruir(tSudoku& s) {
+void destruye(tSudoku& s) {
 	for (int i = 0; i < s.celdas_bloqueadas.cont; i++) {
 		delete s.celdas_bloqueadas.bloqueadas[i]; 
 
@@ -356,30 +356,21 @@ void inicializaSudokuCopia(tSudoku& s1, const tSudoku& s2) {
 	s1.cont_numeros = s2.cont_numeros;
 	s1.celdas_bloqueadas.cont = s2.celdas_bloqueadas.cont;
 
-	for (int i = 0; i < s1.cont_numeros; i++) {
+	for (int i = 0; i < s2.celdas_bloqueadas.cont; i++) {
 		s1.celdas_bloqueadas.bloqueadas[i] = new tPosicion();
 		s1.celdas_bloqueadas.bloqueadas[i]->fila = s2.celdas_bloqueadas.bloqueadas[i]->fila;
 		s1.celdas_bloqueadas.bloqueadas[i]->columna = s2.celdas_bloqueadas.bloqueadas[i]->columna;
 	}
-	}
-	
 }
+	
+
 void copiaIndependiente(tSudoku& s1, const tSudoku& s2) {
 
 	if (&s1 != &s2) {
-		for (int i = 0; i < s1.celdas_bloqueadas.cont; i++) {
-			delete s1.celdas_bloqueadas.bloqueadas[i];
-		}
-		s1.tablero = s2.tablero;
-		s1.valores_celda = s2.valores_celda;
-		s1.cont_numeros = s2.cont_numeros;
-		s1.celdas_bloqueadas.cont = s2.celdas_bloqueadas.cont;
-		for (int i = 0; i < s1.cont_numeros; i++) {
-			s1.celdas_bloqueadas.bloqueadas[i] = new tPosicion();
-			s1.celdas_bloqueadas.bloqueadas[i]->fila = s2.celdas_bloqueadas.bloqueadas[i]->fila;
-			s1.celdas_bloqueadas.bloqueadas[i]->columna = s2.celdas_bloqueadas.bloqueadas[i]->columna;
+		
+		destruye(s1);
 
-		}
+		inicializaSudokuCopia(s1, s2);
 	}
 	
 }

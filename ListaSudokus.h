@@ -1,19 +1,23 @@
 #pragma once
 #include "Sudoku.h"
+
 const int MAX_LISTA = 2;
+
 struct tListaSudokus {
 	int cont;
 	int capacidad;
 	tSudoku** sudokus; // lo usais como si fuera un array
 	//Sobreescritura operador[] para indexar directamente la lista
 	// siendo tListaSudokus ls; 
-	// ls[índice] seria equivalente a *(-ls.sudokus[indice]))
+	// ls[ï¿½ndice] seria equivalente a *(-ls.sudokus[indice]))
 	tSudoku& operator[](int indice) {
 		return *sudokus[indice];
 	};
 
 };
+
 typedef int arrValores[MAX_VALORES];
+
 void inicializaListaSudokus(tListaSudokus& ls);
 void destruyeListaSudokus(tListaSudokus& ls);
 int dame_num_elem(tListaSudokus& ls);
