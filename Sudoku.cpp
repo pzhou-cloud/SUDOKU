@@ -9,7 +9,6 @@ void eliminar_valor(tSudoku& s, int f, int c, int v);
 void remove_casillas_afectadas(tSudoku& s, int fila, int columna, int v);
 
 //Métodos privados versión 1:
-int posibles_valores(const tSudoku& s, int f, int c);
 void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos);
 void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos);
 bool esta_en_zona_relevante(int f, int f_temp, int c, int c_temp);
@@ -156,33 +155,32 @@ void reset(tSudoku& s)
 	s.celdas_bloqueadas.cont = 0;
 }
 
-void autocompleta(tSudoku& s)
+bool autocompleta_simple(tSudoku& s) {
+    bool hay_cambios = false;
+    int v;
+
+    for (int f = 0; f < DIM; f++) {
+        for (int c = 0; c < DIM; c++) {
+
+            if (es_vacia(dame_celda(s, f, c)) && posibles_valores(s, f, c) == 1) {
+                v = 1;
+
+                while (v <= 9 && !pon_valor(s, f, c, v)) {
+                    v++;
+                }
+                hay_cambios = true;
+            }
+        }
+    }
+    return hay_cambios;
+}
+
+void autocompleta_total(tSudoku& s)
 {
-	int v = 1;
-	bool hay_cambios;
-
-	do
-	{
-		hay_cambios = false;
-		for (int f = 0; f < DIM; f++)
-		{
-			for (int c = 0; c < DIM; c++)
-			{
-				if (es_vacia(dame_celda(s, f, c)) && posibles_valores(s, f, c) == 1)
-				{
-					v = 1;
-					while (v <= 9 && !pon_valor(s, f, c, v))
-					{
-						v++;
-					}
-					hay_cambios = true;
-
-				}
-
-			}
-		}
-
-	} while (hay_cambios);
+	bool ok = true;
+	while(ok){
+		ok = autocompleta_simple(s);
+	}
 }
 
 int posibles_valores(const tSudoku& s, int f, int c)
@@ -335,8 +333,6 @@ bool valor_dentro_de_limites(int v){
 }
 
 
-
-// nuevo
 void destruye(tSudoku& s) {
 	for (int i = 0; i < s.celdas_bloqueadas.cont; i++) {
 		delete s.celdas_bloqueadas.bloqueadas[i]; 
@@ -347,7 +343,7 @@ void destruye(tSudoku& s) {
 }
 
 int dame_num_celdas_libre(tSudoku& s) {
-	return DIM * DIM - s.cont_numeros - s.celdas_bloqueadas.cont;
+	return DIM * DIM - s.cont_numeros;
 }
 
 void inicializaSudokuCopia(tSudoku& s1, const tSudoku& s2) {

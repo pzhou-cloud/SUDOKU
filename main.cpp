@@ -50,10 +50,20 @@ int main()
 		numSudoku = elige_sudoku(ls);
 		copiaIndependiente(s, ls[numSudoku - 1]);
 
-		if (jugar(s))
+		int subOpcion = preguntar_ver_o_jugar();
+
+		if (subOpcion == 1)
 		{
-			insertar(lp, s);
-			cout << "Partida guardada en la lista." << endl;
+			mostrar_juego_consola(s);
+		}
+		else
+		{
+			bool abandonado = jugar(s);
+			if (abandonado)
+			{
+				insertar(lp, s);
+				cout << "Partida guardada en la lista de partidas." << endl;
+			}
 		}
 		break;
 
@@ -63,15 +73,21 @@ int main()
 			numSudoku = elige_sudoku(lp);
 			copiaIndependiente(s, lp[numSudoku - 1]);
 
-			bool seRindio = jugar(s);
+			int subOpcion = preguntar_ver_o_jugar();
 
-			eliminar(lp, numSudoku - 1);
-
-			if (seRindio)
+			if (subOpcion == 1)
 			{
-				// Si se rindió, reinsertamos el estado actual (posiblemente cambió su orden)[cite: 3]
-				insertar(lp, s);
-				cout << "Progreso actualizado en la lista de partidas." << endl;
+				mostrar_juego_consola(s);
+			}
+			else
+			{
+				bool abandonado = jugar(s);
+				eliminar(lp, numSudoku - 1); // Se elimina la instancia antigua[cite: 3]
+				if (abandonado)
+				{
+					insertar(lp, s); // Se inserta el nuevo estado[cite: 3]
+					cout << "Progreso actualizado en la lista de partidas." << endl;
+				}
 			}
 		}
 		else
@@ -105,7 +121,8 @@ void mostrar_menu()
 	cout << "3.- reset " << endl;
 	cout << "4.- posibles valores de una celda vacía" << endl;
 	cout << "5.- autocompletar celdas con valor unico " << endl;
-	cout << "6.- salir" << endl;
+	cout << "6.- resolver el sudoku" << endl;
+	cout << "7.- salir" << endl;
 }
 
 int pedir_opcion_valida()
@@ -116,7 +133,7 @@ int pedir_opcion_valida()
 	{
 		cout << "Elige una opcion: ";
 		cin >> opcion;
-	} while (opcion < 1 || opcion > 6);
+	} while (opcion < 1 || opcion > 7);
 
 	return opcion;
 }
@@ -138,17 +155,18 @@ void cargar_lista_partidas(tListaSudokus &lp)
 {
 	ifstream archivo;
 	archivo.open("listaPartidas.txt");
-	int np;
+	int num_partidas;
 	if (archivo.is_open())
 	{
-		archivo >> np;
+		archivo >> num_partidas;
 		int i = 0;
-		while (i < np)
+		while (i < num_partidas)
 		{
 			tSudoku s;
 			inicializaSudoku(s);
 			cargar_partida(archivo, s);
 			insertar(lp, s);
+			destruye(s);
 			i++;
 		}
 	}
@@ -170,36 +188,40 @@ void cargar_partida(ifstream &archivo, tSudoku &s)
 	}
 }
 
-void cargar_lista_sudokus(tListaSudokus &ls) {
-    ifstream archivo_general;
-    ifstream archivo_tablero;
-    int num_sudokus;
-    string nombre_fichero;
+void cargar_lista_sudokus(tListaSudokus &ls)
+{
+	ifstream archivo_general;
+	ifstream archivo_tablero;
+	int num_sudokus;
+	string nombre_fichero;
 
-    archivo_general.open("listaSudokus.txt");
+	archivo_general.open("listaSudokus.txt");
 
-    if (archivo_general.is_open()) {
-        archivo_general >> num_sudokus; 
+	if (archivo_general.is_open())
+	{
+		archivo_general >> num_sudokus;
 
-        for (int i = 0; i < num_sudokus; i++) {
-            archivo_general >> nombre_fichero; 
-            
-            archivo_tablero.open(nombre_fichero); 
+		for (int i = 0; i < num_sudokus; i++)
+		{
+			archivo_general >> nombre_fichero;
 
-            if (archivo_tablero.is_open()) {
-                tSudoku s_temp;
-                inicializaSudoku(s_temp);
-                
-                
-                carga_sudoku(archivo_tablero, s_temp); 
-                insertar(ls, s_temp);
-                
-                archivo_tablero.close(); 
-            }
-        }
-        
-        archivo_general.close();
-    }
+			archivo_tablero.open(nombre_fichero);
+
+			if (archivo_tablero.is_open())
+			{
+
+				tSudoku s;
+				inicializaSudoku(s);
+				carga_sudoku(archivo_tablero, s);
+				insertar(ls, s);
+				destruye(s);
+
+				archivo_tablero.close();
+			}
+		}
+
+		archivo_general.close();
+	}
 }
 
 void cargar_sudoku(ifstream &nombre_fichero_leido, tSudoku &sudoku)
@@ -321,10 +343,13 @@ bool jugar(tSudoku &s)
 		break;
 
 		case 5:
-			autocompleta(s);
+			autocompleta_simple(s);
 			break;
 
 		case 6:
+			autocompleta_total(s);
+			break;
+		case 7:
 			abandonado = true;
 			break;
 		}
@@ -399,4 +424,17 @@ void guardar_lista_partidas(tListaSudokus &lp)
 	{
 		cout << "Error al abrir el archivo para guardar las partidas." << endl;
 	}
+}
+
+int preguntar_ver_o_jugar()
+{
+	int subOpcion;
+	cout << "\n1. Ver un sudoku" << endl;
+	cout << "2. Jugar un sudoku" << endl;
+	do
+	{
+		cout << "Elige opcion: ";
+		cin >> subOpcion;
+	} while (subOpcion != 1 && subOpcion != 2); // Validación simple
+	return subOpcion;
 }

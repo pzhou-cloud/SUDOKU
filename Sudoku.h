@@ -47,16 +47,15 @@ int dame_num_celda_bloqueadas(const tSudoku& s);
 void dame_celda_bloqueada(const tSudoku& s, int p, int& f, int& c);
 void inserta_celda_bloqueada(tSudoku& s, const tPosicion& pos);
 void elimina_celda_bloqueada(tSudoku& s, const tPosicion& pos);
-void elimina_celdas_bloqueadas(tSudoku& s, int f, int c);
 bool es_valor_posible(const tSudoku& s, int f, int c, int v);
 
 bool pon_valor(tSudoku& s, int f, int c, int v);
 bool quita_valor(tSudoku& s, int f, int c);
 void reset(tSudoku& s);
-void autocompleta(tSudoku& s);
+bool autocompleta_simple(tSudoku& s);
+void autocompleta_total(tSudoku& s);
 int posibles_valores(const tSudoku& s, int f, int c); 
 
-// nuevo
 void destruye(tSudoku& s);
 int dame_num_celdas_libre(tSudoku& s);
 

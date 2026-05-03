@@ -82,7 +82,7 @@ bool operator==(tSudoku& s1, tSudoku& s2) {
 
 bool operator<(tSudoku& s1, tSudoku& s2) {
 
-	bool menorDificultad = true;
+	bool menorDificultad = false;
 
 	int num_libres_s1 = dame_num_celdas_libre(s1);
 	int num_libres_s2 = dame_num_celdas_libre(s2);
@@ -153,7 +153,7 @@ void eliminar(tListaSudokus& ls, int pos) {
 void mostrar_lista(tListaSudokus& ls) {
 	for (int i = 0; i < ls.cont; i++) {
 		tSudoku& s = ls[i];
-		cout << i + 1 << ": Sudoku con " << dame_num_celdas_libre(s) << " casillas vacías " << endl;
+		cout << i + 1 << ": Sudoku con " << dame_num_celdas_libre(s) << " casillas vacï¿½as " << endl;
 		arrValores av;
 		numero_posibles_valores(s, av);
 		for (int j = 0; j < MAX_VALORES; j++) {
