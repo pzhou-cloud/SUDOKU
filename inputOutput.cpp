@@ -71,7 +71,4 @@ void mostrar_juego_consola(const tSudoku& s) {
     }
     cout << endl;
 }
- 
 
-// He cambiado Sudoku por tSudoku, Celda por tCelda y añadido el include <iostream> 
-// del archivo que ha enviado la profe

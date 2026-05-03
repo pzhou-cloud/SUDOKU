@@ -6,10 +6,7 @@ const int MAX_LISTA = 2;
 struct tListaSudokus {
 	int cont;
 	int capacidad;
-	tSudoku** sudokus; // lo usais como si fuera un array
-	//Sobreescritura operador[] para indexar directamente la lista
-	// siendo tListaSudokus ls; 
-	// ls[�ndice] seria equivalente a *(-ls.sudokus[indice]))
+	tSudoku** sudokus;
 	tSudoku& operator[](int indice) {
 		return *sudokus[indice];
 	};

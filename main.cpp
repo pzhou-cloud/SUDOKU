@@ -3,12 +3,6 @@
 #include "ListaSudokus.h"
 #include "inputOutput.h"
 
-// Nota para Peipei: Yo estoy en Linux y al parecer lo de
-// memoryleaks usa cosas exclusivas para windows y no funciona.
-
-// Descomenta el include y lo del CrtSet de abajo cuando lo vayas a usar
-//  ok
-
 // #include "memoryleaks.h"
 
 using namespace std;
@@ -82,7 +76,7 @@ int main()
 			else
 			{
 				bool abandonado = jugar(s);
-				eliminar(lp, numSudoku - 1); // Se elimina la instancia antigua[cite: 3]
+				eliminar(lp, numSudoku - 1);
 				if (abandonado)
 				{
 					insertar(lp, s); // Se inserta el nuevo estado[cite: 3]

@@ -2,8 +2,8 @@
 enum tEstado { ORIGINAL, OCUPADA, VACIA };
 
 struct tCelda {
-	int valor;  // valor existente en la celda
-	tEstado estado; // estado de la celda
+	int valor;
+	tEstado estado;
 };
 using namespace std;
 
