@@ -90,7 +90,7 @@ int main()
 					eliminar(lp, numSudoku - 1);
 					if (abandonado)
 					{
-						insertar(lp, s); // Se inserta el nuevo estado[cite: 3]
+						insertar(lp, s);
 						cout << "Progreso actualizado en la lista de partidas." << endl;
 					}
 				}
@@ -443,6 +443,6 @@ int preguntar_ver_o_jugar()
 	{
 		cout << "Elige opcion: ";
 		cin >> subOpcion;
-	} while (subOpcion != 1 && subOpcion != 2); // Validación simple
+	} while (subOpcion != 1 && subOpcion != 2);
 	return subOpcion;
 }
