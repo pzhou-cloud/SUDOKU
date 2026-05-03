@@ -34,6 +34,7 @@ int main()
 	tSudoku s;
 	int numSudoku;
 	int subOpcion;
+	char tipoPartida;
 
 	inicializaSudoku(s);
 	inicializaListaSudokus(ls);
@@ -42,38 +43,19 @@ int main()
 	cargar_lista_sudokus(ls);
 	cargar_lista_partidas(lp);
 
-	char tipoPartida = solicita_tipo_partida();
 
-	switch (tipoPartida)
+
+	do
 	{
-	case 'N':
-		numSudoku = elige_sudoku(ls);
-		copiaIndependiente(s, ls[numSudoku - 1]);
 
-		subOpcion = preguntar_ver_o_jugar();
-
-		if (subOpcion == 1)
+	tipoPartida = solicita_tipo_partida();
+		switch (tipoPartida)
 		{
-			mostrar_juego_consola(s);
-		}
-		else
-		{
-			bool abandonado = jugar(s);
-			if (abandonado)
-			{
-				insertar(lp, s);
-				cout << "Partida guardada en la lista de partidas." << endl;
-			}
-		}
-		break;
+		case 'N':
+			numSudoku = elige_sudoku(ls);
+			copiaIndependiente(s, ls[numSudoku - 1]);
 
-	case 'C':
-		if (dame_num_elem(lp) > 0)
-		{
-			numSudoku = elige_sudoku(lp);
-			copiaIndependiente(s, lp[numSudoku - 1]);
-
-			int subOpcion = preguntar_ver_o_jugar();
+			subOpcion = preguntar_ver_o_jugar();
 
 			if (subOpcion == 1)
 			{
@@ -82,28 +64,52 @@ int main()
 			else
 			{
 				bool abandonado = jugar(s);
-				eliminar(lp, numSudoku - 1);
 				if (abandonado)
 				{
-					insertar(lp, s); // Se inserta el nuevo estado[cite: 3]
-					cout << "Progreso actualizado en la lista de partidas." << endl;
+					insertar(lp, s);
+					cout << "Partida guardada en la lista de partidas." << endl;
 				}
 			}
-		}
-		else
-		{
-			cout << "No hay partidas previas. ¡Prueba una partida nueva!" << endl;
-		}
-		break;
+			break;
 
-	case 'A':
-		cout << "Cerrando aplicación..." << endl;
-		break;
+		case 'C':
+			if (dame_num_elems(lp) > 0)
+			{
+				numSudoku = elige_sudoku(lp);
+				copiaIndependiente(s, lp[numSudoku - 1]);
 
-	default:
-		cout << "Opción no reconocida." << endl;
-		break;
-	}
+				int subOpcion = preguntar_ver_o_jugar();
+
+				if (subOpcion == 1)
+				{
+					mostrar_juego_consola(s);
+				}
+				else
+				{
+					bool abandonado = jugar(s);
+					eliminar(lp, numSudoku - 1);
+					if (abandonado)
+					{
+						insertar(lp, s); // Se inserta el nuevo estado[cite: 3]
+						cout << "Progreso actualizado en la lista de partidas." << endl;
+					}
+				}
+			}
+			else
+			{
+				cout << "No hay partidas previas. ¡Prueba una partida nueva!" << endl;
+			}
+			break;
+
+		case 'A':
+			cout << "Cerrando aplicación..." << endl;
+			break;
+
+		default:
+			cout << "Error, opción no válida." << endl;
+			break;
+		}
+	} while (tipoPartida != 'A');
 
 	guardar_lista_partidas(lp);
 	destruyeListaSudokus(ls);
@@ -410,7 +416,7 @@ void guardar_lista_partidas(tListaSudokus &lp)
 	ofstream archivo("listaPartidas.txt");
 	if (archivo.is_open())
 	{
-		int n = dame_num_elem(lp);
+		int n = dame_num_elems(lp);
 		archivo << n << endl;
 
 		for (int i = 0; i < n; i++)

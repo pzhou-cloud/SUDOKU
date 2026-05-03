@@ -15,7 +15,7 @@ void destruyeListaSudokus(tListaSudokus &ls)
 	}
 	delete[] ls.sudokus;
 }
-int dame_num_elem(const tListaSudokus &ls)
+int dame_num_elems(const tListaSudokus &ls)
 {
 	return ls.cont;
 }
@@ -131,7 +131,7 @@ bool operator<(const tSudoku &s1, const tSudoku &s2)
 	return menorDificultad;
 }
 
-void insertar(tListaSudokus &ls, tSudoku &s)
+void insertar(tListaSudokus &ls, const tSudoku &s)
 {
 
 	if (ls.cont == ls.capacidad)
@@ -152,6 +152,7 @@ void insertar(tListaSudokus &ls, tSudoku &s)
 	}
 
 	ls.sudokus[pos] = new tSudoku();
+	inicializaSudoku(*ls.sudokus[pos]);
 	inicializaSudokuCopia(*ls.sudokus[pos], s);
 	ls.cont++;
 }
