@@ -243,6 +243,8 @@ char solicita_tipo_partida()
 		cout << "Partida nueva (N), continuar partida (C) o abandonar la aplicacion (A)? ";
 		cin >> opcion;
 
+		opcion = toupper(opcion);
+
 		if (opcion != 'N' && opcion != 'C' && opcion != 'A')
 		{
 			cout << "La opción seleccionada (' " << opcion << " ') " << "no es válida" << endl;
