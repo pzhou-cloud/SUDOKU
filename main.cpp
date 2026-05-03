@@ -22,6 +22,10 @@ char solicita_tipo_partida();
 
 int elige_sudoku(tListaSudokus &ls);
 
+bool jugar(tSudoku &s);
+void guardar_lista_partidas(tListaSudokus &lp);
+int preguntar_ver_o_jugar();
+
 int main()
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -29,7 +33,9 @@ int main()
 	tListaSudokus ls, lp;
 	tSudoku s;
 	int numSudoku;
+	int subOpcion;
 
+	inicializaSudoku(s);
 	inicializaListaSudokus(ls);
 	inicializaListaSudokus(lp);
 
@@ -44,7 +50,7 @@ int main()
 		numSudoku = elige_sudoku(ls);
 		copiaIndependiente(s, ls[numSudoku - 1]);
 
-		int subOpcion = preguntar_ver_o_jugar();
+		subOpcion = preguntar_ver_o_jugar();
 
 		if (subOpcion == 1)
 		{

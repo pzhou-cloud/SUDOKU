@@ -57,7 +57,7 @@ void autocompleta_total(tSudoku& s);
 int posibles_valores(const tSudoku& s, int f, int c); 
 
 void destruye(tSudoku& s);
-int dame_num_celdas_libre(tSudoku& s);
+int dame_num_celdas_libre(const tSudoku& s);
 
 void inicializaSudokuCopia(tSudoku& s1, const tSudoku& s2); 
 void copiaIndependiente(tSudoku& s1, const tSudoku& s2);

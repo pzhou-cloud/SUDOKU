@@ -342,7 +342,7 @@ void destruye(tSudoku& s) {
 
 }
 
-int dame_num_celdas_libre(tSudoku& s) {
+int dame_num_celdas_libre(const tSudoku& s) {
 	return DIM * DIM - s.cont_numeros;
 }
 
