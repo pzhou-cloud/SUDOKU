@@ -60,18 +60,20 @@ bool operator==(tSudoku& s1, tSudoku& s2) {
 
 	if (dame_num_celdas_libre(s1) != dame_num_celdas_libre(s2)) {
 		mismaDificultad = false;
-	}else{
+	}
+	else {
 
 		numero_posibles_valores(s1, av1);
 		numero_posibles_valores(s2, av2);
-		
+
 		int i = 0;
 
-		while(i < MAX_VALORES && mismaDificultad){
+		while (i < MAX_VALORES && mismaDificultad) {
 
-			if(av1[i] != av2[i]){
+			if (av1[i] != av2[i]) {
 				mismaDificultad = false;
 			}
+			i++;
 		}
 	}
 
@@ -85,11 +87,12 @@ bool operator<(tSudoku& s1, tSudoku& s2) {
 	int num_libres_s1 = dame_num_celdas_libre(s1);
 	int num_libres_s2 = dame_num_celdas_libre(s2);
 
-	if(num_libres_s1 < num_libres_s2){
+	if (num_libres_s1 < num_libres_s2) {
 
 		menorDificultad = true;
 
-	}else if(num_libres_s1 == num_libres_s2){
+	}
+	else if (num_libres_s1 == num_libres_s2) {
 
 		arrValores av1, av2;
 		numero_posibles_valores(s1, av1);
@@ -98,11 +101,11 @@ bool operator<(tSudoku& s1, tSudoku& s2) {
 		int i = 0;
 		bool ok = true;
 
-		while(i < MAX_VALORES - 1 && av1[i] == av2[i]){
+		while (i < MAX_VALORES - 1 && av1[i] == av2[i]) {
 			i++;
 		}
 
-		if(av1[i] > av2[i]){
+		if (av1[i] > av2[i]) {
 			menorDificultad = true;
 		}
 	}
@@ -110,20 +113,20 @@ bool operator<(tSudoku& s1, tSudoku& s2) {
 	return menorDificultad;
 }
 
-void insertar(tListaSudokus& ls, tSudoku& s){
+void insertar(tListaSudokus& ls, tSudoku& s) {
 
-	if(ls.cont == ls.capacidad){
+	if (ls.cont == ls.capacidad) {
 		redimensionar(ls, ls.capacidad * 2);
 	}
 
 	int pos = 0;
 
-	while(pos < ls.cont && *ls.sudokus[pos] < s){
+	while (pos < ls.cont && *ls.sudokus[pos] < s) {
 		pos++;
 	}
 
-	for(int i = ls.cont; i > pos; i--){
-		ls.sudokus[i] = ls.sudokus[i-1];
+	for (int i = ls.cont; i > pos; i--) {
+		ls.sudokus[i] = ls.sudokus[i - 1];
 	}
 
 	ls.sudokus[pos] = new tSudoku();
@@ -131,18 +134,32 @@ void insertar(tListaSudokus& ls, tSudoku& s){
 	ls.cont++;
 }
 
-void eliminar(tListaSudokus& ls, int pos){
-	
-	if(pos >= 0 && pos < ls.cont){
-		
+void eliminar(tListaSudokus& ls, int pos) {
+
+	if (pos >= 0 && pos < ls.cont) {
+
 		destruye(*ls.sudokus[pos]);
 		delete ls.sudokus[pos];
 
-		for(int i = pos; i < ls.cont - 1; i++){
+		for (int i = pos; i < ls.cont - 1; i++) {
 			ls.sudokus[i] = ls.sudokus[i + 1];
 		}
 
 		ls.cont--;
+	}
+
+}
+
+void mostrar_lista(tListaSudokus& ls) {
+	for (int i = 0; i < ls.cont; i++) {
+		tSudoku& s = ls[i];
+		cout << i + 1 << ": Sudoku con " << dame_num_celdas_libre(s) << " casillas vacías " << endl;
+		arrValores av;
+		numero_posibles_valores(s, av);
+		for (int j = 0; j < MAX_VALORES; j++) {
+			cout << "\t" << "celdas con " << j << " valores posibles: " << av[j] << endl;
+		}
+
 	}
 
 }

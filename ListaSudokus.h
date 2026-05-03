@@ -27,3 +27,6 @@ void numero_posibles_valores(tSudoku& s, arrValores av);
 
 bool operator==(tSudoku& s1, tSudoku& s2);
 bool operator<(tSudoku& s1, tSudoku& s2);
+void insertar(tListaSudokus& ls, tSudoku& s);
+void eliminar(tListaSudokus& ls, int pos);
+void mostrar_lista(tListaSudokus& ls);
